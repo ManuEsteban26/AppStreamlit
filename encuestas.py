@@ -1,10 +1,13 @@
 import streamlit as st
 import time
+from PIL import Image
+import requests
+from io import BytesIO
 
 # --- CONFIGURACIÓN INICIAL ---
 st.set_page_config(
     page_title="Encuestas Zonamerica", 
-    page_icon="📝", 
+    page_icon="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAcCAMAAABF0y+mAAAAKlBMVEVHcEwwrGgwrGgwrGgwrGgwrGgwrGgwrGgwrGgwrGgwrGgwrGgwrGgwrGjV3fMIAAAADXRSTlMATcoq3TlrrwhiivAW61nCVAAAAJ9JREFUKJHNkUsSxCAIREURxMT7X3ckxM9osp2a3hh8dtEQ5/5XwJ7hhfmiyvqZQGKaWSim4E575tPqPBhLk//yEkU9G8T7PgrdUSAfpTdQiRUZMhaWpLGRyR5z70LnOkLsTK46hTBg7hDrLVxpfVidPYkqtrXZVLWkiY4JAWwdk3nf8uSUDY7dlbDB0dRvbCwEH1iNrj8H6ZGp0iv5hT6F0gp3kbmSPQAAAABJRU5ErkJggg==", 
     layout="centered"
 )
 
@@ -322,6 +325,13 @@ def go_home():
 
 # --- PANTALLA PRINCIPAL ---
 def show_home():
+    col1, col2, col3 = st.columns([1, 2, 1])
+    with col1:
+        st.image("https://web.zonamerica.com/colombia/wp-content/themes/zaco/assets/img/logo.png", width=200)
+    with col3:
+        st.image("https://cdn.brandfetch.io/ida2XlnzHx/theme/dark/logo.svg?c=1bxid64Mup7aczewSAYMX&t=1680282084001", width=200)
+
+    
     st.title("📝 Portal de Encuestas Zonamerica")
     st.markdown("Seleccione el tipo de encuesta que desea diligenciar:")
     
@@ -347,6 +357,12 @@ def show_home():
 
 # --- ENCUESTA 1: BUSINESS CENTER (BC) ---
 def show_survey_bc():
+    col1, col2, col3 = st.columns([1, 2, 1])
+    with col1:
+        st.image("https://web.zonamerica.com/colombia/wp-content/themes/zaco/assets/img/logo.png", width=200)
+    with col3:
+        st.image("https://cdn.brandfetch.io/ida2XlnzHx/theme/dark/logo.svg?c=1bxid64Mup7aczewSAYMX&t=1680282084001", width=200)
+
     st.button("← Volver al Inicio", on_click=go_home, type="secondary")
     
     # Encabezado principal del formulario
@@ -369,210 +385,212 @@ def show_survey_bc():
 
     with st.form("form_bc"):
         # Pregunta 1: Política de datos
-        st.subheader("1. Usted acepta la política de tratamiento de datos. (*)")
+        st.markdown("<h4 style='font-size: 20px;'>1. Usted acepta la política de tratamiento de datos. (*)</h4>", unsafe_allow_html=True)
         aceptacion = st.radio("", ["Sí", "No"], horizontal=True, label_visibility="collapsed")
 
         # Pregunta 2: Razón social
-        st.subheader("2. Escriba la razón social de su Organización/Empresa. (*)")
+        st.markdown("<h4 style='font-size: 20px;'>2. Escriba la razón social de su Organización/Empresa. (*)</h4>", unsafe_allow_html=True)
         razon_social = st.text_input("Razón Social", label_visibility="collapsed")
         
         # Pregunta 3: Nombre
-        st.subheader("3. Escriba su nombre y apellidos. (*)")
+        st.markdown("<h4 style='font-size: 20px;'>3. Escriba su nombre y apellidos. (*)</h4>", unsafe_allow_html=True)
         nombre_completo = st.text_input("Nombre completo", label_visibility="collapsed")
 
         st.markdown("---")
         
         # Pregunta 4: Comunicación y Soporte
-        st.subheader("4. Comunicación y Soporte")
+        st.markdown("<h4 style='font-size: 20px;'>4. Comunicación y Soporte</h4>", unsafe_allow_html=True)
         st.caption("En una escala del 1 al 5, siendo 1=muy insatisfecho y 5=muy satisfecho, califica: (*)")
         
         st.markdown("**4.1** ¿Cómo evalúas la comunicación proporcionada por la administración de la Zonamerica?")
-        comunicacion_4_1 = st.slider("4.1", 1, 5, 3, key="com_4_1", label_visibility="collapsed")
+        comunicacion_4_1 = st.selectbox("4.1", [1, 2, 3, 4, 5], index=2, key="com_4_1", label_visibility="collapsed")
         
         st.markdown("**4.2** ¿Estás satisfecho con el nivel de soporte ofrecido por la zona franca?")
-        comunicacion_4_2 = st.slider("4.2", 1, 5, 3, key="com_4_2", label_visibility="collapsed")
+        comunicacion_4_2 = st.selectbox("4.2", [1, 2, 3, 4, 5], index=2, key="com_4_2", label_visibility="collapsed")
 
         # Pregunta 5: Fiabilidad
-        st.subheader("5. Fiabilidad")
+        st.markdown("<h4 style='font-size: 20px;'>5. Fiabilidad</h4>", unsafe_allow_html=True)
         st.caption("En una escala del 1 al 5, siendo 1=muy insatisfecho y 5=muy satisfecho, califica: (*)")
         
         st.markdown("**5.1** Zonamerica resuelve íntegramente sus necesidades como usuario/cliente.")
-        fiabilidad_5_1 = st.slider("5.1", 1, 5, 3, key="fia_5_1", label_visibility="collapsed")
+        fiabilidad_5_1 = st.selectbox("5.1", [1, 2, 3, 4, 5], index=2, key="fia_5_1", label_visibility="collapsed")
         
         st.markdown("**5.2** La capacidad de Zonamerica para cumplir con los acuerdos establecidos ha influido en la toma de decisiones estratégicas de tu empresa.")
-        fiabilidad_5_2 = st.slider("5.2", 1, 5, 3, key="fia_5_2", label_visibility="collapsed")
+        fiabilidad_5_2 = st.selectbox("5.2", [1, 2, 3, 4, 5], index=2, key="fia_5_2", label_visibility="collapsed")
 
         # Pregunta 6: Capacidad de respuesta
-        st.subheader("6. Capacidad de respuesta")
+        st.markdown("<h4 style='font-size: 20px;'>6. Capacidad de respuesta</h4>", unsafe_allow_html=True)
         st.caption("En una escala del 1 al 5, siendo 1=muy insatisfecho y 5=muy satisfecho, califica: (*)")
         
         st.markdown("**6.1** ¿Te sientes satisfecho/a con la velocidad y eficacia de la respuesta a tus solicitudes y necesidades por parte de la administración de Zonamerica?")
-        capacidad_6_1 = st.slider("6.1", 1, 5, 3, key="cap_6_1", label_visibility="collapsed")
+        capacidad_6_1 = st.selectbox("6.1", [1, 2, 3, 4, 5], index=2, key="cap_6_1", label_visibility="collapsed")
         
         st.markdown("**6.2** ¿La capacidad de respuesta ágil de Zonamerica ha influido en la eficiencia operativa de tu empresa?")
-        capacidad_6_2 = st.slider("6.2", 1, 5, 3, key="cap_6_2", label_visibility="collapsed")
+        capacidad_6_2 = st.selectbox("6.2", [1, 2, 3, 4, 5], index=2, key="cap_6_2", label_visibility="collapsed")
 
         # Pregunta 7: Confianza
-        st.subheader("7. Confianza")
+        st.markdown("<h4 style='font-size: 20px;'>7. Confianza</h4>", unsafe_allow_html=True)
         st.caption("En una escala del 1 al 5, siendo 1=muy insatisfecho y 5=muy satisfecho, califica: (*)")
         
         st.markdown("**7.1** ¿La integridad y ética empresarial de Zonamerica han contribuido a consolidar la confianza de tu empresa en su relación?")
-        confianza_7_1 = st.slider("7.1", 1, 5, 3, key="con_7_1", label_visibility="collapsed")
+        confianza_7_1 = st.selectbox("7.1", [1, 2, 3, 4, 5], index=2, key="con_7_1", label_visibility="collapsed")
         
         st.markdown("**7.2** ¿El equipo humano de Zonamerica, es amable y diligente e infunde confianza en usted?")
-        confianza_7_2 = st.slider("7.2", 1, 5, 3, key="con_7_2", label_visibility="collapsed")
+        confianza_7_2 = st.selectbox("7.2", [1, 2, 3, 4, 5], index=2, key="con_7_2", label_visibility="collapsed")
 
         # Pregunta 8: Empatía
-        st.subheader("8. Empatía")
+        st.markdown("<h4 style='font-size: 20px;'>8. Empatía</h4>", unsafe_allow_html=True)
         st.caption("En una escala del 1 al 5, siendo 1=muy insatisfecho y 5=muy satisfecho, califica: (*)")
         
         st.markdown("**8.1** Zonamerica comprende y se preocupa por las necesidades específicas de tu empresa.")
-        empatia_8_1 = st.slider("8.1", 1, 5, 3, key="emp_8_1", label_visibility="collapsed")
+        empatia_8_1 = st.selectbox("8.1", [1, 2, 3, 4, 5], index=2, key="emp_8_1", label_visibility="collapsed")
         
         st.markdown("**8.2** Zonamerica demuestra sensibilidad hacia las circunstancias individuales de las empresas establecidas en ella.")
-        empatia_8_2 = st.slider("8.2", 1, 5, 3, key="emp_8_2", label_visibility="collapsed")
+        empatia_8_2 = st.selectbox("8.2", [1, 2, 3, 4, 5], index=2, key="emp_8_2", label_visibility="collapsed")
 
         # Pregunta 9: Elementos Tangibles
-        st.subheader("9. Elementos Tangibles")
+        st.markdown("<h4 style='font-size: 20px;'>9. Elementos Tangibles</h4>", unsafe_allow_html=True)
         st.caption("En una escala del 1 al 5, siendo 1=muy insatisfecho y 5=muy satisfecho, califica: (*)")
         
         st.markdown("**9.1** Las oficinas y espacios de trabajo, cumplen con tus expectativas y necesidades empresariales.")
-        tangibles_9_1 = st.slider("9.1", 1, 5, 3, key="tan_9_1", label_visibility="collapsed")
+        tangibles_9_1 = st.selectbox("9.1", [1, 2, 3, 4, 5], index=2, key="tan_9_1", label_visibility="collapsed")
         
         st.markdown("**9.2** La calidad de las instalaciones y servicios de Zonamerica ha impactado positivamente en la imagen y operación de tu empresa.")
-        tangibles_9_2 = st.slider("9.2", 1, 5, 3, key="tan_9_2", label_visibility="collapsed")
+        tangibles_9_2 = st.selectbox("9.2", [1, 2, 3, 4, 5], index=2, key="tan_9_2", label_visibility="collapsed")
 
         st.markdown("---")
         
         # Pregunta 10: Área de Tecnología/TIC'S
-        st.subheader("10. Área de Tecnología/TIC'S")
+        st.markdown("<h4 style='font-size: 20px;'>10. Área de Tecnología/TIC'S</h4>", unsafe_allow_html=True)
         st.caption("En una escala del 1 al 5, siendo 1=muy insatisfecho y 5=muy satisfecho, califica: (*)")
         col10_1, col10_2, col10_3 = st.columns(3)
         with col10_1:
-            tic_tiempo = st.slider("Tiempo de espera", 1, 5, 3, key="tic_tiempo")
+            tic_tiempo = st.selectbox("Tiempo de espera", [1, 2, 3, 4, 5], index=2, key="tic_tiempo")
         with col10_2:
-            tic_calidad = st.slider("Calidad de servicio", 1, 5, 3, key="tic_calidad")
+            tic_calidad = st.selectbox("Calidad de servicio", [1, 2, 3, 4, 5], index=2, key="tic_calidad")
         with col10_3:
-            tic_atencion = st.slider("Atención del personal", 1, 5, 3, key="tic_atencion")
+            tic_atencion = st.selectbox("Atención del personal", [1, 2, 3, 4, 5], index=2, key="tic_atencion")
 
         # Pregunta 11: Área de Operaciones y Equipos de Mantenimiento
-        st.subheader("11. Área de Operaciones y Equipos de Mantenimiento")
+        st.markdown("<h4 style='font-size: 20px;'>11. Área de Operaciones y Equipos de Mantenimiento</h4>", unsafe_allow_html=True)
         st.caption("En una escala del 1 al 5, siendo 1=muy insatisfecho y 5=muy satisfecho, califica: (*)")
         col11_1, col11_2, col11_3 = st.columns(3)
         with col11_1:
-            oper_tiempo = st.slider("Tiempo de espera", 1, 5, 3, key="oper_tiempo")
+            oper_tiempo = st.selectbox("Tiempo de espera", [1, 2, 3, 4, 5], index=2, key="oper_tiempo")
         with col11_2:
-            oper_calidad = st.slider("Calidad de servicio", 1, 5, 3, key="oper_calidad")
+            oper_calidad = st.selectbox("Calidad de servicio", [1, 2, 3, 4, 5], index=2, key="oper_calidad")
         with col11_3:
-            oper_atencion = st.slider("Atención del personal", 1, 5, 3, key="oper_atencion")
+            oper_atencion = st.selectbox("Atención del personal", [1, 2, 3, 4, 5], index=2, key="oper_atencion")
 
         # Pregunta 12: Área Comercial, Bienestar y ATC
-        st.subheader("12. Área Comercial, Bienestar y ATC")
+        st.markdown("<h4 style='font-size: 20px;'>12. Área Comercial, Bienestar y ATC</h4>", unsafe_allow_html=True)
         st.caption("En una escala del 1 al 5, siendo 1=muy insatisfecho y 5=muy satisfecho, califica: (*)")
         col12_1, col12_2, col12_3 = st.columns(3)
         with col12_1:
-            com_tiempo = st.slider("Tiempo de espera", 1, 5, 3, key="com_tiempo")
+            com_tiempo = st.selectbox("Tiempo de espera", [1, 2, 3, 4, 5], index=2, key="com_tiempo")
         with col12_2:
-            com_calidad = st.slider("Calidad de servicio", 1, 5, 3, key="com_calidad")
+            com_calidad = st.selectbox("Calidad de servicio", [1, 2, 3, 4, 5], index=2, key="com_calidad")
         with col12_3:
-            com_atencion = st.slider("Atención del personal", 1, 5, 3, key="com_atencion")
+            com_atencion = st.selectbox("Atención del personal", [1, 2, 3, 4, 5], index=2, key="com_atencion")
 
         # Pregunta 13: Área Administrativa y Financiera
-        st.subheader("13. Área Administrativa y Financiera")
+        st.markdown("<h4 style='font-size: 20px;'>13. Área Administrativa y Financiera</h4>", unsafe_allow_html=True)
         st.caption("En una escala del 1 al 5, siendo 1=muy insatisfecho y 5=muy satisfecho, califica: (*)")
         col13_1, col13_2, col13_3 = st.columns(3)
         with col13_1:
-            admin_tiempo = st.slider("Tiempo de espera", 1, 5, 3, key="admin_tiempo")
+            admin_tiempo = st.selectbox("Tiempo de espera", [1, 2, 3, 4, 5], index=2, key="admin_tiempo")
         with col13_2:
-            admin_calidad = st.slider("Calidad de servicio", 1, 5, 3, key="admin_calidad")
+            admin_calidad = st.selectbox("Calidad de servicio", [1, 2, 3, 4, 5], index=2, key="admin_calidad")
         with col13_3:
-            admin_atencion = st.slider("Atención del personal", 1, 5, 3, key="admin_atencion")
+            admin_atencion = st.selectbox("Atención del personal", [1, 2, 3, 4, 5], index=2, key="admin_atencion")
 
         # Pregunta 14: Área GCI y Control de Inventarios
-        st.subheader("14. Área GCI y Control de Inventarios")
+        st.markdown("<h4 style='font-size: 20px;'>14. Área GCI y Control de Inventarios</h4>", unsafe_allow_html=True)
         st.caption("En una escala del 1 al 5, siendo 1=muy insatisfecho y 5=muy satisfecho, califica: (*)")
         col14_1, col14_2, col14_3 = st.columns(3)
         with col14_1:
-            gci_tiempo = st.slider("Tiempo de espera", 1, 5, 3, key="gci_tiempo")
+            gci_tiempo = st.selectbox("Tiempo de espera", [1, 2, 3, 4, 5], index=2, key="gci_tiempo")
         with col14_2:
-            gci_calidad = st.slider("Calidad de servicio", 1, 5, 3, key="gci_calidad")
+            gci_calidad = st.selectbox("Calidad de servicio", [1, 2, 3, 4, 5], index=2, key="gci_calidad")
         with col14_3:
-            gci_atencion = st.slider("Atención del personal", 1, 5, 3, key="gci_atencion")
+            gci_atencion = st.selectbox("Atención del personal", [1, 2, 3, 4, 5], index=2, key="gci_atencion")
 
         # Pregunta 15: Servicios Business Center
-        st.subheader("15. Servicios Business Center")
+        st.markdown("<h4 style='font-size: 20px;'>15. Servicios Business Center</h4>", unsafe_allow_html=True)
         st.caption("En una escala del 1 al 5, siendo 1=muy insatisfecho y 5=muy satisfecho, califica: (*)")
         col15_a, col15_b = st.columns(2)
         with col15_a:
-            bc_mobiliario = st.slider("Mobiliario", 1, 5, 3, key="bc_mob")
-            bc_limpieza = st.slider("Calidad de Limpieza", 1, 5, 3, key="bc_limp")
-            bc_aire = st.slider("Aire Acondicionado", 1, 5, 3, key="bc_aire")
-            bc_telefonia = st.slider("Servicio de Telefonía", 1, 5, 3, key="bc_tel")
+            bc_mobiliario = st.selectbox("Mobiliario", [1, 2, 3, 4, 5], index=2, key="bc_mob")
+            bc_limpieza = st.selectbox("Calidad de Limpieza", [1, 2, 3, 4, 5], index=2, key="bc_limp")
+            bc_aire = st.selectbox("Aire Acondicionado", [1, 2, 3, 4, 5], index=2, key="bc_aire")
+            bc_telefonia = st.selectbox("Servicio de Telefonía", [1, 2, 3, 4, 5], index=2, key="bc_tel")
         with col15_b:
-            bc_internet = st.slider("Servicio de Internet y Datos", 1, 5, 3, key="bc_int")
-            bc_impresiones = st.slider("Servicios de Impresiones", 1, 5, 3, key="bc_imp")
-            bc_atencion = st.slider("Calidad y Disponibilidad del equipo de Atención al Cliente", 1, 5, 3, key="bc_atc")
-            bc_salas = st.slider("Calidad y Disponibilidad del servicio de sala de reuniones", 1, 5, 3, key="bc_salas")
+            bc_internet = st.selectbox("Servicio de Internet y Datos", [1, 2, 3, 4, 5], index=2, key="bc_int")
+            bc_impresiones = st.selectbox("Servicios de Impresiones", [1, 2, 3, 4, 5], index=2, key="bc_imp")
+            bc_atencion = st.selectbox("Calidad y Disponibilidad del equipo de Atención al Cliente", [1, 2, 3, 4, 5], index=2, key="bc_atc")
+            bc_salas = st.selectbox("Calidad y Disponibilidad del servicio de sala de reuniones", [1, 2, 3, 4, 5], index=2, key="bc_salas")
 
         # Pregunta 16: Nivel de satisfacción servicios generales
-        st.subheader("16. Nivel de satisfacción - Servicios Generales")
+        st.markdown("<h4 style='font-size: 20px;'>16. Nivel de satisfacción - Servicios Generales</h4>", unsafe_allow_html=True)
         st.caption("En términos generales, ¿Cuál diría que es el Nivel de satisfacción de su empresa en relación a los siguientes servicios que ofrece Zonamerica? (*)")
         col16_a, col16_b = st.columns(2)
         with col16_a:
-            gen_registro = st.slider("Proceso de Registro e Ingreso de Funcionarios, Visitantes y Proveedores", 1, 5, 3, key="gen_reg")
-            gen_seguridad = st.slider("Seguridad en general", 1, 5, 3, key="gen_seg")
-            gen_areas = st.slider("Áreas comunes de esparcimiento (internas y externas)", 1, 5, 3, key="gen_areas")
+            gen_registro = st.selectbox("Proceso de Registro e Ingreso de Funcionarios, Visitantes y Proveedores", [1, 2, 3, 4, 5], index=2, key="gen_reg")
+            gen_seguridad = st.selectbox("Seguridad en general", [1, 2, 3, 4, 5], index=2, key="gen_seg")
+            gen_areas = st.selectbox("Áreas comunes de esparcimiento (internas y externas)", [1, 2, 3, 4, 5], index=2, key="gen_areas")
         with col16_b:
-            gen_alquiler = st.slider("Alquiler de espacios y equipos para actividades de cada usuario/cliente", 1, 5, 3, key="gen_alq")
-            gen_bienestar = st.slider("Actividades promovidas por Zonamerica para el bienestar de la comunidad", 1, 5, 3, key="gen_bien")
-            gen_mantenimiento = st.slider("Mantenimiento y limpieza de la infraestructura de Zonamerica", 1, 5, 3, key="gen_mant")
+            gen_alquiler = st.selectbox("Alquiler de espacios y equipos para actividades de cada usuario/cliente", [1, 2, 3, 4, 5], index=2, key="gen_alq")
+            gen_bienestar = st.selectbox("Actividades promovidas por Zonamerica para el bienestar de la comunidad", [1, 2, 3, 4, 5], index=2, key="gen_bien")
+            gen_mantenimiento = st.selectbox("Mantenimiento y limpieza de la infraestructura de Zonamerica", [1, 2, 3, 4, 5], index=2, key="gen_mant")
 
         # Pregunta 17: Nivel de satisfacción - Necesidades del personal
-        st.subheader("17. Necesidades del Personal")
+        st.markdown("<h4 style='font-size: 20px;'>17. Necesidades del Personal</h4>", unsafe_allow_html=True)
         st.caption("Teniendo en cuenta las necesidades de su personal, por favor califique su Nivel de Satisfacción: (*)")
         col17_a, col17_b = st.columns(2)
         with col17_a:
-            pers_restaurante = st.slider("Restaurante", 1, 5, 3, key="pers_rest")
-            pers_cafe = st.slider("Café", 1, 5, 3, key="pers_cafe")
-            pers_cajero = st.slider("Cajero", 1, 5, 3, key="pers_cajero")
+            pers_restaurante = st.selectbox("Restaurante", [1, 2, 3, 4, 5], index=2, key="pers_rest")
+            pers_cafe = st.selectbox("Café", [1, 2, 3, 4, 5], index=2, key="pers_cafe")
+            pers_cajero = st.selectbox("Cajero", [1, 2, 3, 4, 5], index=2, key="pers_cajero")
         with col17_b:
-            pers_vending = st.slider("Vending Machine", 1, 5, 3, key="pers_vend")
-            pers_esparcimiento = st.slider("Áreas de esparcimiento en general", 1, 5, 3, key="pers_espa")
+            pers_vending = st.selectbox("Vending Machine", [1, 2, 3, 4, 5], index=2, key="pers_vend")
+            pers_esparcimiento = st.selectbox("Áreas de esparcimiento en general", [1, 2, 3, 4, 5], index=2, key="pers_espa")
 
         st.markdown("---")
 
         # Pregunta 18: Satisfacción general
-        st.subheader("18. ¿En general, qué tan satisfecho está con Zonamerica? (*)")
-        satisfaccion_general = st.slider("Satisfacción general", 1, 5, 3, key="sat_gen", label_visibility="collapsed")
+        st.markdown("<h4 style='font-size: 20px;'>18. ¿En general, qué tan satisfecho está con Zonamerica? (*)</h4>", unsafe_allow_html=True)
+        satisfaccion_general = st.selectbox("Satisfacción general", [1, 2, 3, 4, 5], index=2, key="sat_gen", label_visibility="collapsed")
 
         # Pregunta 19: Servicios nuevos 2025
-        st.subheader("19. ¿Qué tipo de servicios nuevos o mejorados le gustaría ver de nuestra empresa en 2025? (*)")
+        st.markdown("<h4 style='font-size: 20px;'>19. ¿Qué tipo de servicios nuevos o mejorados le gustaría ver de nuestra empresa en 2025? (*)</h4>", unsafe_allow_html=True)
         servicios_2025 = st.text_area("Servicios 2025", key="serv_2025", label_visibility="collapsed")
 
         # Pregunta 20: Observaciones servicios generales
-        st.subheader("20. Observaciones - Servicios Generales (*)")
+        st.markdown("<h4 style='font-size: 20px;'>20. Observaciones - Servicios Generales (*)</h4>", unsafe_allow_html=True)
         st.caption("Con respecto a los Servicios Generales, por favor amplíe sus observaciones y/o sugerencias y/o empresas de apoyo.")
         obs_servicios_generales = st.text_area("Observaciones generales", key="obs_gen", label_visibility="collapsed")
 
         # Pregunta 21: Observaciones Business Center
-        st.subheader("21. Observaciones - Business Center (*)")
+        st.markdown("<h4 style='font-size: 20px;'>21. Observaciones - Business Center (*)</h4>", unsafe_allow_html=True)
         st.caption("Con respecto a los Servicios Business Center por favor amplíe sus observaciones y/o sugerencias.")
         obs_bc = st.text_area("Observaciones BC", key="obs_bc", label_visibility="collapsed")
 
         # Pregunta 22: Observaciones Amenities
-        st.subheader("22. Observaciones - Amenities (*)")
+        st.markdown("<h4 style='font-size: 20px;'>22. Observaciones - Amenities (*)</h4>", unsafe_allow_html=True)
         st.caption("Con respecto a los Amenities y/o empresas de apoyo, por favor amplíe sus observaciones y/o sugerencias.")
         obs_amenities = st.text_area("Observaciones amenities", key="obs_amen", label_visibility="collapsed")
 
         # Pregunta 23: Experiencia emocional
-        st.subheader("23. ¿Cómo se siente acerca de su experiencia general con Zonamerica? (*)")
-        emocion = st.radio("Emoción",
-                          ["Feliz 😄", "Encantado 🤩", "Neutral 😐", "Decepcionado 😞", "Molesto 😠"],
-                          horizontal=True, key="emocion", label_visibility="collapsed")
+        st.markdown("<h4 style='font-size: 20px;'>23. ¿Cómo se siente acerca de su experiencia general con Zonamerica? (*)</h4>", unsafe_allow_html=True)
+        emocion = st.radio(
+            "Emoción",
+            ["Feliz 😄", "Encantado 🤩", "Neutral 😐", "Decepcionado 😞", "Molesto 😠"],
+            horizontal=True, key="emocion", label_visibility="collapsed"
+        )
 
         # Pregunta 24: NPS
-        st.subheader("24. De 1 a 10, ¿Qué tanto recomendaría a sus colegas o amigos Zonamerica? (*)")
-        nps = st.select_slider("NPS", options=range(1, 11), value=8, key="nps", label_visibility="collapsed")
+        st.markdown("<h4 style='font-size: 20px;'>24. De 1 a 10, ¿Qué tanto recomendaría a sus colegas o amigos Zonamerica? (*)</h4>", unsafe_allow_html=True)
+        nps = st.selectbox("NPS", options=range(1, 11), index=8, key="nps", label_visibility="collapsed")
 
         submitted = st.form_submit_button("Enviar Encuesta BC", type="primary", use_container_width=True)
 
@@ -582,7 +600,6 @@ def show_survey_bc():
             elif not razon_social or not nombre_completo:
                 st.error("⚠️ Por favor complete la Razón Social y su Nombre.")
             else:
-                # Preparar el diccionario completo de datos
                 data_payload = {
                     "aceptacion_politica": aceptacion == "Sí",
                     "razon_social": razon_social,
@@ -649,6 +666,12 @@ def show_survey_bc():
 
 # --- ENCUESTA 2: OBRA GRIS ---
 def show_survey_obra_gris():
+    col1, col2, col3 = st.columns([1, 2, 1])
+    with col1:
+        st.image("https://web.zonamerica.com/colombia/wp-content/themes/zaco/assets/img/logo.png", width=200)
+    with col3:
+        st.image("https://cdn.brandfetch.io/ida2XlnzHx/theme/dark/logo.svg?c=1bxid64Mup7aczewSAYMX&t=1680282084001", width=200)
+
     st.button("← Volver al Inicio", on_click=go_home, type="secondary")
     
     # Encabezado principal del formulario
@@ -671,208 +694,210 @@ def show_survey_obra_gris():
 
     with st.form("form_obra_gris"):
         # Pregunta 1: Política de datos
-        st.subheader("1. Usted acepta la política de tratamiento de datos. (*)")
+        st.markdown("<h4 style='font-size: 20px;'>1. Usted acepta la política de tratamiento de datos. (*)</h4>", unsafe_allow_html=True)
         aceptacion = st.radio("", ["Sí", "No"], horizontal=True, label_visibility="collapsed")
 
         # Pregunta 2: Razón social
-        st.subheader("2. Escriba la razón social de su Organización/Empresa. (*)")
+        st.markdown("<h4 style='font-size: 20px;'>2. Escriba la razón social de su Organización/Empresa. (*)</h4>", unsafe_allow_html=True)
         razon_social = st.text_input("Razón Social", label_visibility="collapsed")
         
         # Pregunta 3: Nombre
-        st.subheader("3. Escriba su nombre y apellidos. (*)")
+        st.markdown("<h4 style='font-size: 20px;'>3. Escriba su nombre y apellidos. (*)</h4>", unsafe_allow_html=True)
         nombre_completo = st.text_input("Nombre completo", label_visibility="collapsed")
 
         st.markdown("---")
         
         # Pregunta 4: Comunicación y Soporte
-        st.subheader("4. Comunicación y Soporte")
+        st.markdown("<h4 style='font-size: 20px;'>4. Comunicación y Soporte</h4>", unsafe_allow_html=True)
         st.caption("En una escala del 1 al 5, siendo 1=muy insatisfecho y 5=muy satisfecho, califica: (*)")
         
         st.markdown("**4.1** ¿Cómo evalúas la comunicación proporcionada por la administración de la Zonamerica?")
-        comunicacion_4_1 = st.slider("4.1", 1, 5, 3, key="og_com_4_1", label_visibility="collapsed")
+        comunicacion_4_1 = st.selectbox("4.1", [1, 2, 3, 4, 5], index=2, key="og_com_4_1", label_visibility="collapsed")
         
         st.markdown("**4.2** ¿Estás satisfecho con el nivel de soporte ofrecido por la zona franca?")
-        comunicacion_4_2 = st.slider("4.2", 1, 5, 3, key="og_com_4_2", label_visibility="collapsed")
+        comunicacion_4_2 = st.selectbox("4.2", [1, 2, 3, 4, 5], index=2, key="og_com_4_2", label_visibility="collapsed")
 
         # Pregunta 5: Fiabilidad
-        st.subheader("5. Fiabilidad")
+        st.markdown("<h4 style='font-size: 20px;'>5. Fiabilidad</h4>", unsafe_allow_html=True)
         st.caption("En una escala del 1 al 5, siendo 1=muy insatisfecho y 5=muy satisfecho, califica: (*)")
         
         st.markdown("**5.1** Zonamerica resuelve íntegramente sus necesidades como usuario/cliente.")
-        fiabilidad_5_1 = st.slider("5.1", 1, 5, 3, key="og_fia_5_1", label_visibility="collapsed")
+        fiabilidad_5_1 = st.selectbox("5.1", [1, 2, 3, 4, 5], index=2, key="og_fia_5_1", label_visibility="collapsed")
         
         st.markdown("**5.2** La capacidad de Zonamerica para cumplir con los acuerdos establecidos ha influido en la toma de decisiones estratégicas de tu empresa.")
-        fiabilidad_5_2 = st.slider("5.2", 1, 5, 3, key="og_fia_5_2", label_visibility="collapsed")
+        fiabilidad_5_2 = st.selectbox("5.2", [1, 2, 3, 4, 5], index=2, key="og_fia_5_2", label_visibility="collapsed")
 
         # Pregunta 6: Capacidad de respuesta
-        st.subheader("6. Capacidad de respuesta")
+        st.markdown("<h4 style='font-size: 20px;'>6. Capacidad de respuesta</h4>", unsafe_allow_html=True)
         st.caption("En una escala del 1 al 5, siendo 1=muy insatisfecho y 5=muy satisfecho, califica: (*)")
         
         st.markdown("**6.1** ¿Te sientes satisfecho/a con la velocidad y eficacia de la respuesta a tus solicitudes y necesidades por parte de la administración de Zonamerica?")
-        capacidad_6_1 = st.slider("6.1", 1, 5, 3, key="og_cap_6_1", label_visibility="collapsed")
+        capacidad_6_1 = st.selectbox("6.1", [1, 2, 3, 4, 5], index=2, key="og_cap_6_1", label_visibility="collapsed")
         
         st.markdown("**6.2** ¿La capacidad de respuesta ágil de Zonamerica ha influido en la eficiencia operativa de tu empresa?")
-        capacidad_6_2 = st.slider("6.2", 1, 5, 3, key="og_cap_6_2", label_visibility="collapsed")
+        capacidad_6_2 = st.selectbox("6.2", [1, 2, 3, 4, 5], index=2, key="og_cap_6_2", label_visibility="collapsed")
 
         # Pregunta 7: Confianza
-        st.subheader("7. Confianza")
+        st.markdown("<h4 style='font-size: 20px;'>7. Confianza</h4>", unsafe_allow_html=True)
         st.caption("En una escala del 1 al 5, siendo 1=muy insatisfecho y 5=muy satisfecho, califica: (*)")
         
         st.markdown("**7.1** ¿La integridad y ética empresarial de Zonamerica han contribuido a consolidar la confianza de tu empresa en su relación?")
-        confianza_7_1 = st.slider("7.1", 1, 5, 3, key="og_con_7_1", label_visibility="collapsed")
+        confianza_7_1 = st.selectbox("7.1", [1, 2, 3, 4, 5], index=2, key="og_con_7_1", label_visibility="collapsed")
         
         st.markdown("**7.2** ¿El equipo humano de Zonamerica, es amable y diligente e infunde confianza en usted?")
-        confianza_7_2 = st.slider("7.2", 1, 5, 3, key="og_con_7_2", label_visibility="collapsed")
+        confianza_7_2 = st.selectbox("7.2", [1, 2, 3, 4, 5], index=2, key="og_con_7_2", label_visibility="collapsed")
 
         # Pregunta 8: Empatía
-        st.subheader("8. Empatía")
+        st.markdown("<h4 style='font-size: 20px;'>8. Empatía</h4>", unsafe_allow_html=True)
         st.caption("En una escala del 1 al 5, siendo 1=muy insatisfecho y 5=muy satisfecho, califica: (*)")
         
         st.markdown("**8.1** Zonamerica comprende y se preocupa por las necesidades específicas de tu empresa.")
-        empatia_8_1 = st.slider("8.1", 1, 5, 3, key="og_emp_8_1", label_visibility="collapsed")
+        empatia_8_1 = st.selectbox("8.1", [1, 2, 3, 4, 5], index=2, key="og_emp_8_1", label_visibility="collapsed")
         
         st.markdown("**8.2** Zonamerica demuestra sensibilidad hacia las circunstancias individuales de las empresas establecidas en ella.")
-        empatia_8_2 = st.slider("8.2", 1, 5, 3, key="og_emp_8_2", label_visibility="collapsed")
+        empatia_8_2 = st.selectbox("8.2", [1, 2, 3, 4, 5], index=2, key="og_emp_8_2", label_visibility="collapsed")
 
         # Pregunta 9: Elementos Tangibles
-        st.subheader("9. Elementos Tangibles")
+        st.markdown("<h4 style='font-size: 20px;'>9. Elementos Tangibles</h4>", unsafe_allow_html=True)
         st.caption("En una escala del 1 al 5, siendo 1=muy insatisfecho y 5=muy satisfecho, califica: (*)")
         
         st.markdown("**9.1** Las oficinas y espacios de trabajo, cumplen con tus expectativas y necesidades empresariales.")
-        tangibles_9_1 = st.slider("9.1", 1, 5, 3, key="og_tan_9_1", label_visibility="collapsed")
+        tangibles_9_1 = st.selectbox("9.1", [1, 2, 3, 4, 5], index=2, key="og_tan_9_1", label_visibility="collapsed")
         
         st.markdown("**9.2** La calidad de las instalaciones y servicios de Zonamerica ha impactado positivamente en la imagen y operación de tu empresa.")
-        tangibles_9_2 = st.slider("9.2", 1, 5, 3, key="og_tan_9_2", label_visibility="collapsed")
+        tangibles_9_2 = st.selectbox("9.2", [1, 2, 3, 4, 5], index=2, key="og_tan_9_2", label_visibility="collapsed")
 
         st.markdown("---")
         
         # Pregunta 10: Área de Tecnología/TIC'S
-        st.subheader("10. Área de Tecnología/TIC'S")
+        st.markdown("<h4 style='font-size: 20px;'>10. Área de Tecnología/TIC'S</h4>", unsafe_allow_html=True)
         st.caption("En una escala del 1 al 5, siendo 1=muy insatisfecho y 5=muy satisfecho, califica: (*)")
         col10_1, col10_2, col10_3 = st.columns(3)
         with col10_1:
-            tic_tiempo = st.slider("Tiempo de espera", 1, 5, 3, key="og_tic_tiempo")
+            tic_tiempo = st.selectbox("Tiempo de espera", [1, 2, 3, 4, 5], index=2, key="og_tic_tiempo")
         with col10_2:
-            tic_calidad = st.slider("Calidad de servicio", 1, 5, 3, key="og_tic_calidad")
+            tic_calidad = st.selectbox("Calidad de servicio", [1, 2, 3, 4, 5], index=2, key="og_tic_calidad")
         with col10_3:
-            tic_atencion = st.slider("Atención del personal", 1, 5, 3, key="og_tic_atencion")
+            tic_atencion = st.selectbox("Atención del personal", [1, 2, 3, 4, 5], index=2, key="og_tic_atencion")
 
         # Pregunta 11: Área de Operaciones y Equipos de Mantenimiento
-        st.subheader("11. Área de Operaciones y Equipos de Mantenimiento")
+        st.markdown("<h4 style='font-size: 20px;'>11. Área de Operaciones y Equipos de Mantenimiento</h4>", unsafe_allow_html=True)
         st.caption("En una escala del 1 al 5, siendo 1=muy insatisfecho y 5=muy satisfecho, califica: (*)")
         col11_1, col11_2, col11_3 = st.columns(3)
         with col11_1:
-            oper_tiempo = st.slider("Tiempo de espera", 1, 5, 3, key="og_oper_tiempo")
+            oper_tiempo = st.selectbox("Tiempo de espera", [1, 2, 3, 4, 5], index=2, key="og_oper_tiempo")
         with col11_2:
-            oper_calidad = st.slider("Calidad de servicio", 1, 5, 3, key="og_oper_calidad")
+            oper_calidad = st.selectbox("Calidad de servicio", [1, 2, 3, 4, 5], index=2, key="og_oper_calidad")
         with col11_3:
-            oper_atencion = st.slider("Atención del personal", 1, 5, 3, key="og_oper_atencion")
+            oper_atencion = st.selectbox("Atención del personal", [1, 2, 3, 4, 5], index=2, key="og_oper_atencion")
 
         # Pregunta 12: Área Comercial, Bienestar y ATC
-        st.subheader("12. Área Comercial, Bienestar y ATC")
+        st.markdown("<h4 style='font-size: 20px;'>12. Área Comercial, Bienestar y ATC</h4>", unsafe_allow_html=True)
         st.caption("En una escala del 1 al 5, siendo 1=muy insatisfecho y 5=muy satisfecho, califica: (*)")
         col12_1, col12_2, col12_3 = st.columns(3)
         with col12_1:
-            com_tiempo = st.slider("Tiempo de espera", 1, 5, 3, key="og_com_tiempo")
+            com_tiempo = st.selectbox("Tiempo de espera", [1, 2, 3, 4, 5], index=2, key="og_com_tiempo")
         with col12_2:
-            com_calidad = st.slider("Calidad de servicio", 1, 5, 3, key="og_com_calidad")
+            com_calidad = st.selectbox("Calidad de servicio", [1, 2, 3, 4, 5], index=2, key="og_com_calidad")
         with col12_3:
-            com_atencion = st.slider("Atención del personal", 1, 5, 3, key="og_com_atencion")
+            com_atencion = st.selectbox("Atención del personal", [1, 2, 3, 4, 5], index=2, key="og_com_atencion")
 
         # Pregunta 13: Área Administrativa y Financiera
-        st.subheader("13. Área Administrativa y Financiera")
+        st.markdown("<h4 style='font-size: 20px;'>13. Área Administrativa y Financiera</h4>", unsafe_allow_html=True)
         st.caption("En una escala del 1 al 5, siendo 1=muy insatisfecho y 5=muy satisfecho, califica: (*)")
         col13_1, col13_2, col13_3 = st.columns(3)
         with col13_1:
-            admin_tiempo = st.slider("Tiempo de espera", 1, 5, 3, key="og_admin_tiempo")
+            admin_tiempo = st.selectbox("Tiempo de espera", [1, 2, 3, 4, 5], index=2, key="og_admin_tiempo")
         with col13_2:
-            admin_calidad = st.slider("Calidad de servicio", 1, 5, 3, key="og_admin_calidad")
+            admin_calidad = st.selectbox("Calidad de servicio", [1, 2, 3, 4, 5], index=2, key="og_admin_calidad")
         with col13_3:
-            admin_atencion = st.slider("Atención del personal", 1, 5, 3, key="og_admin_atencion")
+            admin_atencion = st.selectbox("Atención del personal", [1, 2, 3, 4, 5], index=2, key="og_admin_atencion")
 
         # Pregunta 14: Área GCI y Control de Inventarios
-        st.subheader("14. Área GCI y Control de Inventarios")
+        st.markdown("<h4 style='font-size: 20px;'>14. Área GCI y Control de Inventarios</h4>", unsafe_allow_html=True)
         st.caption("En una escala del 1 al 5, siendo 1=muy insatisfecho y 5=muy satisfecho, califica: (*)")
         col14_1, col14_2, col14_3 = st.columns(3)
         with col14_1:
-            gci_tiempo = st.slider("Tiempo de espera", 1, 5, 3, key="og_gci_tiempo")
+            gci_tiempo = st.selectbox("Tiempo de espera", [1, 2, 3, 4, 5], index=2, key="og_gci_tiempo")
         with col14_2:
-            gci_calidad = st.slider("Calidad de servicio", 1, 5, 3, key="og_gci_calidad")
+            gci_calidad = st.selectbox("Calidad de servicio", [1, 2, 3, 4, 5], index=2, key="og_gci_calidad")
         with col14_3:
-            gci_atencion = st.slider("Atención del personal", 1, 5, 3, key="og_gci_atencion")
+            gci_atencion = st.selectbox("Atención del personal", [1, 2, 3, 4, 5], index=2, key="og_gci_atencion")
 
         # Pregunta 15: Servicios Contratados (diferente a BC)
-        st.subheader("15. Servicios Contratados")
+        st.markdown("<h4 style='font-size: 20px;'>15. Servicios Contratados</h4>", unsafe_allow_html=True)
         st.caption("De acuerdo con los servicios que recibe de Zonamerica ¿Cuál diría que es el Nivel de satisfacción de su empresa en relación con los siguientes servicios que contrata con Zonamerica? (*)")
         col15_a, col15_b = st.columns(2)
         with col15_a:
-            sc_limpieza = st.slider("Limpieza de su oficina/local", 1, 5, 3, key="og_sc_limp")
-            sc_aire = st.slider("Aire Acondicionado", 1, 5, 3, key="og_sc_aire")
-            sc_telefonia = st.slider("Servicio de Telefonía", 1, 5, 3, key="og_sc_tel")
+            sc_limpieza = st.selectbox("Limpieza de su oficina/local", [1, 2, 3, 4, 5], index=2, key="og_sc_limp")
+            sc_aire = st.selectbox("Aire Acondicionado", [1, 2, 3, 4, 5], index=2, key="og_sc_aire")
+            sc_telefonia = st.selectbox("Servicio de Telefonía", [1, 2, 3, 4, 5], index=2, key="og_sc_tel")
         with col15_b:
-            sc_internet = st.slider("Servicio de Internet y Datos", 1, 5, 3, key="og_sc_int")
-            sc_impresiones = st.slider("Servicios de Impresiones", 1, 5, 3, key="og_sc_imp")
-            sc_vigilancia = st.slider("Servicio de vigilancia de su local", 1, 5, 3, key="og_sc_vig")
+            sc_internet = st.selectbox("Servicio de Internet y Datos", [1, 2, 3, 4, 5], index=2, key="og_sc_int")
+            sc_impresiones = st.selectbox("Servicios de Impresiones", [1, 2, 3, 4, 5], index=2, key="og_sc_imp")
+            sc_vigilancia = st.selectbox("Servicio de vigilancia de su local", [1, 2, 3, 4, 5], index=2, key="og_sc_vig")
 
         # Pregunta 16: Nivel de satisfacción servicios generales
-        st.subheader("16. Nivel de satisfacción - Servicios Generales")
+        st.markdown("<h4 style='font-size: 20px;'>16. Nivel de satisfacción - Servicios Generales</h4>", unsafe_allow_html=True)
         st.caption("En términos generales, ¿Cuál diría que es el Nivel de satisfacción de su empresa en relación a los siguientes servicios que ofrece Zonamerica? (*)")
         col16_a, col16_b = st.columns(2)
         with col16_a:
-            gen_proceso = st.slider("Proceso de Registro e Ingreso de Funcionarios, Visitantes y Proveedores", 1, 5, 3, key="og_gen_proc")
-            gen_seguridad = st.slider("Seguridad en general", 1, 5, 3, key="og_gen_seg")
-            gen_areas = st.slider("Áreas comunes de esparcimiento (internas y externas)", 1, 5, 3, key="og_gen_areas")
+            gen_proceso = st.selectbox("Proceso de Registro e Ingreso de Funcionarios, Visitantes y Proveedores", [1, 2, 3, 4, 5], index=2, key="og_gen_proc")
+            gen_seguridad = st.selectbox("Seguridad en general", [1, 2, 3, 4, 5], index=2, key="og_gen_seg")
+            gen_areas = st.selectbox("Áreas comunes de esparcimiento (internas y externas)", [1, 2, 3, 4, 5], index=2, key="og_gen_areas")
         with col16_b:
-            gen_alquiler = st.slider("Alquiler de espacios y equipos para actividades de cada usuario/cliente", 1, 5, 3, key="og_gen_alq")
-            gen_actividades = st.slider("Actividades promovidas por Zonamerica para el bienestar de la comunidad", 1, 5, 3, key="og_gen_act")
-            gen_mantenimiento = st.slider("Mantenimiento y limpieza de la infraestructura de Zonamerica", 1, 5, 3, key="og_gen_mant")
+            gen_alquiler = st.selectbox("Alquiler de espacios y equipos para actividades de cada usuario/cliente", [1, 2, 3, 4, 5], index=2, key="og_gen_alq")
+            gen_actividades = st.selectbox("Actividades promovidas por Zonamerica para el bienestar de la comunidad", [1, 2, 3, 4, 5], index=2, key="og_gen_act")
+            gen_mantenimiento = st.selectbox("Mantenimiento y limpieza de la infraestructura de Zonamerica", [1, 2, 3, 4, 5], index=2, key="og_gen_mant")
 
         # Pregunta 17: Nivel de satisfacción - Necesidades del personal
-        st.subheader("17. Necesidades del Personal")
+        st.markdown("<h4 style='font-size: 20px;'>17. Necesidades del Personal</h4>", unsafe_allow_html=True)
         st.caption("Teniendo en cuenta las necesidades de su personal, por favor califique su Nivel de Satisfacción: (*)")
         col17_a, col17_b = st.columns(2)
         with col17_a:
-            pers_restaurante = st.slider("Restaurante", 1, 5, 3, key="og_pers_rest")
-            pers_cafe = st.slider("Café", 1, 5, 3, key="og_pers_cafe")
-            pers_cajero = st.slider("Cajero", 1, 5, 3, key="og_pers_cajero")
+            pers_restaurante = st.selectbox("Restaurante", [1, 2, 3, 4, 5], index=2, key="og_pers_rest")
+            pers_cafe = st.selectbox("Café", [1, 2, 3, 4, 5], index=2, key="og_pers_cafe")
+            pers_cajero = st.selectbox("Cajero", [1, 2, 3, 4, 5], index=2, key="og_pers_cajero")
         with col17_b:
-            pers_vending = st.slider("Vending Machine", 1, 5, 3, key="og_pers_vend")
-            pers_esparcimiento = st.slider("Áreas de esparcimiento en general", 1, 5, 3, key="og_pers_espa")
+            pers_vending = st.selectbox("Vending Machine", [1, 2, 3, 4, 5], index=2, key="og_pers_vend")
+            pers_esparcimiento = st.selectbox("Áreas de esparcimiento en general", [1, 2, 3, 4, 5], index=2, key="og_pers_espa")
 
         st.markdown("---")
 
         # Pregunta 18: Satisfacción general
-        st.subheader("18. ¿En general, qué tan satisfecho está con Zonamerica? (*)")
-        satisfaccion_general = st.slider("Satisfacción general", 1, 5, 3, key="og_sat_gen", label_visibility="collapsed")
+        st.markdown("<h4 style='font-size: 20px;'>18. ¿En general, qué tan satisfecho está con Zonamerica? (*)</h4>", unsafe_allow_html=True)
+        satisfaccion_general = st.selectbox("Satisfacción general", [1, 2, 3, 4, 5], index=2, key="og_sat_gen", label_visibility="collapsed")
 
         # Pregunta 19: Servicios nuevos 2025
-        st.subheader("19. ¿Qué tipo de servicios nuevos o mejorados le gustaría ver de nuestra empresa en 2025? (*)")
+        st.markdown("<h4 style='font-size: 20px;'>19. ¿Qué tipo de servicios nuevos o mejorados le gustaría ver de nuestra empresa en 2025? (*)</h4>", unsafe_allow_html=True)
         servicios_2025 = st.text_area("Servicios 2025", key="og_serv_2025", label_visibility="collapsed")
 
         # Pregunta 20: Observaciones servicios generales
-        st.subheader("20. Observaciones - Servicios Generales (*)")
+        st.markdown("<h4 style='font-size: 20px;'>20. Observaciones - Servicios Generales (*)</h4>", unsafe_allow_html=True)
         st.caption("Con respecto a los Servicios Generales, por favor amplíe sus observaciones y/o sugerencias.")
         obs_servicios_generales = st.text_area("Observaciones generales", key="og_obs_gen", label_visibility="collapsed")
 
         # Pregunta 21: Observaciones Servicios Contratados (diferente a BC)
-        st.subheader("21. Observaciones - Servicios Contratados (*)")
+        st.markdown("<h4 style='font-size: 20px;'>21. Observaciones - Servicios Contratados (*)</h4>", unsafe_allow_html=True)
         st.caption("Con respecto a los Servicios Contratados por favor amplíe sus observaciones y/o sugerencias.")
         obs_servicios_contratados = st.text_area("Observaciones SC", key="og_obs_sc", label_visibility="collapsed")
 
         # Pregunta 22: Observaciones Amenities
-        st.subheader("22. Observaciones - Amenities (*)")
+        st.markdown("<h4 style='font-size: 20px;'>22. Observaciones - Amenities (*)</h4>", unsafe_allow_html=True)
         st.caption("Con respecto a los Amenities y/o empresas de apoyo, por favor amplíe sus observaciones y/o sugerencias.")
         obs_amenities = st.text_area("Observaciones amenities", key="og_obs_amen", label_visibility="collapsed")
 
         # Pregunta 23: Experiencia emocional
-        st.subheader("23. ¿Cómo se siente acerca de su experiencia general con Zonamerica? (*)")
-        emocion = st.radio("Emoción",
-                          ["Feliz 😄", "Encantado 🤩", "Neutral 😐", "Decepcionado 😞", "Molesto 😠"],
-                          horizontal=True, key="og_emocion", label_visibility="collapsed")
+        st.markdown("<h4 style='font-size: 20px;'>23. ¿Cómo se siente acerca de su experiencia general con Zonamerica? (*)</h4>", unsafe_allow_html=True)
+        emocion = st.radio(
+            "Emoción",
+            ["Feliz 😄", "Encantado 🤩", "Neutral 😐", "Decepcionado 😞", "Molesto 😠"],
+            horizontal=True, key="og_emocion", label_visibility="collapsed"
+        )
 
         # Pregunta 24: NPS
-        st.subheader("24. De 1 a 10, ¿Qué tanto recomendaría a sus colegas o amigos Zonamerica? (*)")
-        nps = st.select_slider("NPS", options=range(1, 11), value=8, key="og_nps", label_visibility="collapsed")
+        st.markdown("<h4 style='font-size: 20px;'>24. De 1 a 10, ¿Qué tanto recomendaría a sus colegas o amigos Zonamerica? (*)</h4>", unsafe_allow_html=True)
+        nps = st.selectbox("NPS", options=range(1, 11), index=8, key="og_nps", label_visibility="collapsed")
 
         submitted = st.form_submit_button("Enviar Encuesta Obra Gris", type="primary", use_container_width=True)
 
@@ -882,7 +907,6 @@ def show_survey_obra_gris():
             elif not razon_social or not nombre_completo:
                 st.error("⚠️ Por favor complete la Razón Social y su Nombre.")
             else:
-                # Preparar el diccionario completo de datos
                 data_payload = {
                     "aceptacion_politica": aceptacion == "Sí",
                     "razon_social": razon_social,
@@ -940,14 +964,20 @@ def show_survey_obra_gris():
                     "p24_nps": nps
                 }
 
-                # Guardar en Supabase
                 if guardar_en_supabase(data_payload, "Cuestionario_Obra_Gris"):
                     st.balloons()
                     time.sleep(2)
                     go_home()
 
+
 # --- ENCUESTA 3: COMUNIDAD ---
 def show_survey_comunidad():
+    col1, col2, col3 = st.columns([1, 2, 1])
+    with col1:
+        st.image("https://web.zonamerica.com/colombia/wp-content/themes/zaco/assets/img/logo.png", width=200)
+    with col3:
+        st.image("https://cdn.brandfetch.io/ida2XlnzHx/theme/dark/logo.svg?c=1bxid64Mup7aczewSAYMX&t=1680282084001", width=200)
+
     st.button("← Volver al Inicio", on_click=go_home, type="secondary")
     
     # Encabezado principal del formulario
@@ -970,116 +1000,118 @@ def show_survey_comunidad():
 
     with st.form("form_comunidad"):
         # Pregunta 1: Política de datos
-        st.subheader("1. Usted acepta la política de tratamiento de datos. (*)")
+        st.markdown("<h4 style='font-size: 20px;'>1. Usted acepta la política de tratamiento de datos. (*)</h4>", unsafe_allow_html=True)
         aceptacion = st.radio("", ["Sí", "No"], horizontal=True, label_visibility="collapsed")
 
         # Pregunta 2: Empresa donde labora
-        st.subheader("2. Escriba el nombre de la empresa donde labora actualmente dentro de Zonamerica. (*)")
+        st.markdown("<h4 style='font-size: 20px;'>2. Escriba el nombre de la empresa donde labora actualmente dentro de Zonamerica. (*)</h4>", unsafe_allow_html=True)
         empresa_actual = st.text_input("Empresa actual", label_visibility="collapsed")
 
         st.markdown("---")
         
         # Pregunta 3: Fiabilidad
-        st.subheader("3. Fiabilidad")
+        st.markdown("<h4 style='font-size: 20px;'>3. Fiabilidad</h4>", unsafe_allow_html=True)
         st.caption("En una escala del 1 al 5, siendo 1=muy insatisfecho y 5=muy satisfecho, califica: (*)")
         
         st.markdown("**3.1** En Zonamerica le brindan un servicio eficiente y eficaz.")
-        fiabilidad_3_1 = st.slider("3.1", 1, 5, 3, key="com_fia_3_1", label_visibility="collapsed")
+        fiabilidad_3_1 = st.selectbox("3.1", [1, 2, 3, 4, 5], index=2, key="com_fia_3_1", label_visibility="collapsed")
         
         st.markdown("**3.2** Zonamerica resuelve íntegramente sus necesidades como usuario/cliente.")
-        fiabilidad_3_2 = st.slider("3.2", 1, 5, 3, key="com_fia_3_2", label_visibility="collapsed")
+        fiabilidad_3_2 = st.selectbox("3.2", [1, 2, 3, 4, 5], index=2, key="com_fia_3_2", label_visibility="collapsed")
 
         # Pregunta 4: Capacidad de respuesta
-        st.subheader("4. Capacidad de respuesta")
+        st.markdown("<h4 style='font-size: 20px;'>4. Capacidad de respuesta</h4>", unsafe_allow_html=True)
         st.caption("En una escala del 1 al 5, siendo 1=muy insatisfecho y 5=muy satisfecho, califica: (*)")
         
         st.markdown("**4.1** Zonamerica concluye la solicitud de un servicio en el tiempo indicado.")
-        capacidad_4_1 = st.slider("4.1", 1, 5, 3, key="com_cap_4_1", label_visibility="collapsed")
+        capacidad_4_1 = st.selectbox("4.1", [1, 2, 3, 4, 5], index=2, key="com_cap_4_1", label_visibility="collapsed")
         
         st.markdown("**4.2** Atención al Cliente siempre lo mantiene informado respecto a la ejecución de una solicitud de servicio.")
-        capacidad_4_2 = st.slider("4.2", 1, 5, 3, key="com_cap_4_2", label_visibility="collapsed")
+        capacidad_4_2 = st.selectbox("4.2", [1, 2, 3, 4, 5], index=2, key="com_cap_4_2", label_visibility="collapsed")
 
         # Pregunta 5: Confianza
-        st.subheader("5. Confianza")
+        st.markdown("<h4 style='font-size: 20px;'>5. Confianza</h4>", unsafe_allow_html=True)
         st.caption("En una escala del 1 al 5, siendo 1=muy insatisfecho y 5=muy satisfecho, califica: (*)")
         
         st.markdown("**5.1** El equipo humano de Zonamerica, es amable y diligente e infunde confianza en usted.")
-        confianza_5_1 = st.slider("5.1", 1, 5, 3, key="com_con_5_1", label_visibility="collapsed")
+        confianza_5_1 = st.selectbox("5.1", [1, 2, 3, 4, 5], index=2, key="com_con_5_1", label_visibility="collapsed")
         
         st.markdown("**5.2** El equipo humano de Zonamerica tiene conocimientos suficientes para atender sus solicitudes.")
-        confianza_5_2 = st.slider("5.2", 1, 5, 3, key="com_con_5_2", label_visibility="collapsed")
+        confianza_5_2 = st.selectbox("5.2", [1, 2, 3, 4, 5], index=2, key="com_con_5_2", label_visibility="collapsed")
 
         # Pregunta 6: Empatía
-        st.subheader("6. Empatía")
+        st.markdown("<h4 style='font-size: 20px;'>6. Empatía</h4>", unsafe_allow_html=True)
         st.caption("En una escala del 1 al 5, siendo 1=muy insatisfecho y 5=muy satisfecho, califica: (*)")
         
         st.markdown("**6.1** El equipo humano de Zonamerica comprende sus necesidades específicas como usuario/cliente.")
-        empatia_6_1 = st.slider("6.1", 1, 5, 3, key="com_emp_6_1", label_visibility="collapsed")
+        empatia_6_1 = st.selectbox("6.1", [1, 2, 3, 4, 5], index=2, key="com_emp_6_1", label_visibility="collapsed")
         
         st.markdown("**6.2** Zonamerica y su equipo humano, le ofrecen una atención y seguimiento personalizado.")
-        empatia_6_2 = st.slider("6.2", 1, 5, 3, key="com_emp_6_2", label_visibility="collapsed")
+        empatia_6_2 = st.selectbox("6.2", [1, 2, 3, 4, 5], index=2, key="com_emp_6_2", label_visibility="collapsed")
 
         # Pregunta 7: Elementos Tangibles
-        st.subheader("7. Elementos Tangibles")
+        st.markdown("<h4 style='font-size: 20px;'>7. Elementos Tangibles</h4>", unsafe_allow_html=True)
         st.caption("En una escala del 1 al 5, siendo 1=muy insatisfecho y 5=muy satisfecho, califica: (*)")
         
         st.markdown("**7.1** Las instalaciones físicas de Zonamerica son cómodas, visualmente atractivas y de aspecto impecable.")
-        tangibles_7_1 = st.slider("7.1", 1, 5, 3, key="com_tan_7_1", label_visibility="collapsed")
+        tangibles_7_1 = st.selectbox("7.1", [1, 2, 3, 4, 5], index=2, key="com_tan_7_1", label_visibility="collapsed")
         
         st.markdown("**7.2** Zonamerica cuenta con equipamientos modernos y eficientes.")
-        tangibles_7_2 = st.slider("7.2", 1, 5, 3, key="com_tan_7_2", label_visibility="collapsed")
+        tangibles_7_2 = st.selectbox("7.2", [1, 2, 3, 4, 5], index=2, key="com_tan_7_2", label_visibility="collapsed")
 
         st.markdown("---")
         
         # Pregunta 8: Servicios generales contratados
-        st.subheader("8. Servicios generales contratados")
+        st.markdown("<h4 style='font-size: 20px;'>8. Servicios generales contratados</h4>", unsafe_allow_html=True)
         st.caption("En una escala del 1 al 5, siendo 1=muy insatisfecho y 5=muy satisfecho, califica: (*)")
         
         col8_a, col8_b = st.columns(2)
         with col8_a:
-            sg_calidad = st.slider("Calidad y estado de mantenimiento, limpieza de su edificio y áreas comunes", 1, 5, 3, key="com_sg_calidad")
-            sg_alquiler = st.slider("Alquiler de espacios y equipos para actividades propias de cada usuario/cliente", 1, 5, 3, key="com_sg_alquiler")
-            sg_promovidas = st.slider("Actividades promovidas por Zonamerica para el bienestar de la comunidad", 1, 5, 3, key="com_sg_promov")
-            sg_aire = st.slider("Aire Acondicionado", 1, 5, 3, key="com_sg_aire")
+            sg_calidad = st.selectbox("Calidad y estado de mantenimiento, limpieza de su edificio y áreas comunes", [1, 2, 3, 4, 5], index=2, key="com_sg_calidad")
+            sg_alquiler = st.selectbox("Alquiler de espacios y equipos para actividades propias de cada usuario/cliente", [1, 2, 3, 4, 5], index=2, key="com_sg_alquiler")
+            sg_promovidas = st.selectbox("Actividades promovidas por Zonamerica para el bienestar de la comunidad", [1, 2, 3, 4, 5], index=2, key="com_sg_promov")
+            sg_aire = st.selectbox("Aire Acondicionado", [1, 2, 3, 4, 5], index=2, key="com_sg_aire")
         with col8_b:
-            sg_internet = st.slider("Internet y conexión Wifi", 1, 5, 3, key="com_sg_internet")
-            sg_mantenimiento = st.slider("Mantenimiento y Reparaciones", 1, 5, 3, key="com_sg_mant")
-            sg_telefono = st.slider("Teléfono, Impresiones, Icloud", 1, 5, 3, key="com_sg_tel")
+            sg_internet = st.selectbox("Internet y conexión Wifi", [1, 2, 3, 4, 5], index=2, key="com_sg_internet")
+            sg_mantenimiento = st.selectbox("Mantenimiento y Reparaciones", [1, 2, 3, 4, 5], index=2, key="com_sg_mant")
+            sg_telefono = st.selectbox("Teléfono, Impresiones, Icloud", [1, 2, 3, 4, 5], index=2, key="com_sg_tel")
 
         # Pregunta 9: Amenities
-        st.subheader("9. Amenities")
+        st.markdown("<h4 style='font-size: 20px;'>9. Amenities</h4>", unsafe_allow_html=True)
         st.caption("En una escala del 1 al 5, siendo 1=muy insatisfecho y 5=muy satisfecho, califica: (*)")
         
         col9_a, col9_b = st.columns(2)
         with col9_a:
-            am_restaurante = st.slider("Restaurante FRONTERA", 1, 5, 3, key="com_am_rest")
-            am_cafe = st.slider("Café ONDA", 1, 5, 3, key="com_am_cafe")
-            am_cajero = st.slider("Cajero BANCOLOMBIA", 1, 5, 3, key="com_am_cajero")
+            am_restaurante = st.selectbox("Restaurante FRONTERA", [1, 2, 3, 4, 5], index=2, key="com_am_rest")
+            am_cafe = st.selectbox("Café ONDA", [1, 2, 3, 4, 5], index=2, key="com_am_cafe")
+            am_cajero = st.selectbox("Cajero BANCOLOMBIA", [1, 2, 3, 4, 5], index=2, key="com_am_cajero")
         with col9_b:
-            am_vending = st.slider("Vending Machine", 1, 5, 3, key="com_am_vend")
-            am_area = st.slider("Área esparcimiento en general", 1, 5, 3, key="com_am_area")
+            am_vending = st.selectbox("Vending Machine", [1, 2, 3, 4, 5], index=2, key="com_am_vend")
+            am_area = st.selectbox("Área esparcimiento en general", [1, 2, 3, 4, 5], index=2, key="com_am_area")
 
         st.markdown("---")
 
         # Pregunta 10: Observaciones Servicios Generales
-        st.subheader("10. Observaciones - Servicios Generales (*)")
+        st.markdown("<h4 style='font-size: 20px;'>10. Observaciones - Servicios Generales (*)</h4>", unsafe_allow_html=True)
         st.caption("Si tiene alguna observación, recomendación, solicitud o pedido específico con respecto a Servicios Generales o Contratados, nos gustaría mucho contar con su opinión. Gracias")
         obs_servicios = st.text_area("Observaciones servicios", key="com_obs_serv", label_visibility="collapsed")
 
         # Pregunta 11: Observaciones Amenities
-        st.subheader("11. Observaciones - Amenities (*)")
+        st.markdown("<h4 style='font-size: 20px;'>11. Observaciones - Amenities (*)</h4>", unsafe_allow_html=True)
         st.caption("Si tiene alguna observación, recomendación, solicitud o pedido específico con respecto a Servicios de Bienestar o empresas de apoyo-AMENITIES-, nos gustaría mucho contar con su opinión. Gracias")
         obs_amenities = st.text_area("Observaciones amenities", key="com_obs_amen", label_visibility="collapsed")
 
         # Pregunta 12: Experiencia emocional
-        st.subheader("12. ¿Cómo se siente acerca de su experiencia general con Zonamerica? (*)")
-        emocion = st.radio("Emoción",
-                          ["Feliz 😄", "Encantado 🤩", "Neutral 😐", "Decepcionado 😞", "Molesto 😠"],
-                          horizontal=True, key="com_emocion", label_visibility="collapsed")
+        st.markdown("<h4 style='font-size: 20px;'>12. ¿Cómo se siente acerca de su experiencia general con Zonamerica? (*)</h4>", unsafe_allow_html=True)
+        emocion = st.radio(
+            "Emoción",
+            ["Feliz 😄", "Encantado 🤩", "Neutral 😐", "Decepcionado 😞", "Molesto 😠"],
+            horizontal=True, key="com_emocion", label_visibility="collapsed"
+        )
 
         # Pregunta 13: NPS
-        st.subheader("13. De 1 a 10, ¿Qué tanto recomendaría a sus colegas o amigos Zonamerica? (*)")
-        nps = st.select_slider("NPS", options=range(1, 11), value=8, key="com_nps", label_visibility="collapsed")
+        st.markdown("<h4 style='font-size: 20px;'>13. De 1 a 10, ¿Qué tanto recomendaría a sus colegas o amigos Zonamerica? (*)</h4>", unsafe_allow_html=True)
+        nps = st.selectbox("NPS", options=range(1, 11), index=8, key="com_nps", label_visibility="collapsed")
 
         submitted = st.form_submit_button("Enviar Encuesta Comunidad", type="primary", use_container_width=True)
 
@@ -1089,7 +1121,6 @@ def show_survey_comunidad():
             elif not empresa_actual:
                 st.error("⚠️ Por favor complete el nombre de la empresa donde labora.")
             else:
-                # Preparar el diccionario completo de datos
                 data_payload = {
                     "aceptacion_politica": aceptacion == "Sí",
                     "empresa_actual": empresa_actual,
@@ -1121,11 +1152,11 @@ def show_survey_comunidad():
                     "p13_nps": nps
                 }
 
-                # Guardar en Supabase
                 if guardar_en_supabase(data_payload, "Cuestionario_Comunidad"):
                     st.balloons()
                     time.sleep(2)
                     go_home()
+
 
 if __name__ == "__main__":
     main()
