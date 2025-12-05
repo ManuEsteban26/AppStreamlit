@@ -12,7 +12,6 @@ st.set_page_config(
     layout="centered"
 )
 
-
 # --- FUNCIÓN GUARDAR EN SUPABASE ---
 def guardar_en_supabase(datos, tabla):
     """
@@ -252,12 +251,9 @@ def show_survey_motorola():
                 # Llamar a la función de guardado
                 guardar_en_supabase(data_payload, "Cuestionario_Motorola")
                 
-
-
 # --- NAVEGACIÓN PRINCIPAL (MAIN) ---
 def main():
     show_survey_motorola()
-
 
 # Ejecutar la aplicación
 if __name__ == '__main__':
