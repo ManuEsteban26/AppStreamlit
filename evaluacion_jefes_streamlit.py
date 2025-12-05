@@ -4,12 +4,14 @@ from PIL import Image
 import requests 
 from io import BytesIO 
 
+
 # --- CONFIGURACIÓN INICIAL ---
 st.set_page_config(
     page_title="Encuesta de Liderazgo - Motorola Solutions", 
-    page_icon="⭐", 
+    page_icon="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAADi0lEQVRIia1WPUsrQRSdfRohYpJSsVDR1lIUUVAQI8TGTsRCbBJBg1iYHyBiEwVJimhhk7UxgmKhIkHZKhgsxA8sTDBIFAlENCaZzW52975ifGvYncnzyTtFmL1n7jnZmZ25l8MYIwY4jrNYLDU1NaVSKZVKZTKZYrGIELLZbE1NTW1tbXV1dYqiKIoCACwRhGkQRVHTtI+PD57nnU4nK3dsbCwSiWCMVVUVRZEqRTEol8sY45WVFeafMiEYDEqSJMvy3w0AIBaLfV9ah91uv76+1jStmgEAbGxs/EBdx+7uLgDQDQDA7/ebc2ZnZ1lyc3Nz5iDP85UenwaapkUiEaqKKIosg0KhQI0LgqAoypeBJEkPDw/UqW63GwAGBwfNlNfrBYDu7m5qYjabLZVKnwYA0N/fT513fHwMAFtbW2YqGo0CwObmJjVxamqKLBSSZfn09JQ6CSFULBYBIJVKmSlRFAEgmUyycm9vbyVJQqwVQAg5nU4A0DQNABwORyU1OjqqUywDj8cDACidTrNmhMNhXWV5ebmS2t7e1qmlpSWWQqFQQDs7Oyw6nX7SVS4uLiqp5+dnnYrH4ywFQRCQz+ejci0tLUSCqFQuRWtrK4syIBAI/Lq5uaFyXq9XHxMJj8dDHivPF6HcbjdVJJFIoObmZip3dXWlLwL5PTw8ZFFHR0dUEZfLhSwWC5WDP8jlcmSQz+cNVD6fJwNSJ8wYGhr6Zfj+CBYWFhBCyWSysbHR4XBwHHd/f9/Q0NDX10fWJxaLcRxns9m6urqy2Wx9ff3IyIhZp7a2Fg0PD5sJQRDM90wulwuFQicnJ+bDBQA8z5t1ZmZm0Pz8vJkAAPNN6XK5np6eisWieduCweDr66tZZ3V1FYX5sCE6Pj5eLpfNsxFCd3d3rP0EgI6ODkMwGo2iRCJhiB4cHLCu7snJyZ6eHip1fn4eCAQMwbe3NwQAnZ2dlVFRFKk7Vh2Li4uGvZmYmAAAVC6X9/f39ejAwEC1HqQqDInxeFyWZUTKWXt7O4na7fafqSOErFar1WolY3LdfhYcWZYvLy9/rEtFOp3+qmikqK2vr/8v9b29PVVVKV0FtUv4V/j9fkpXgTEmJZB1e38TgUCA2Rfp71GlBFXH2dmZQZ1igDFWVfXl5WV6evr70j6f7/39Xe+F/mKAMS6VSgDw+Pi4trZmOIaV6O3tDYVCmUwGAFjd9W/hH7T1NboR6gAAAABJRU5ErkJggg==", 
     layout="centered"
 )
+
 
 # --- FUNCIÓN GUARDAR EN SUPABASE ---
 def guardar_en_supabase(datos, tabla):
@@ -17,42 +19,57 @@ def guardar_en_supabase(datos, tabla):
     Guarda los datos de la encuesta en Supabase.
     """
     try:
-        # Importar el cliente de Supabase (se asume que está configurado)
         from supabase import create_client, Client
         
-        # **REEMPLAZA ESTAS VARIABLES CON TUS CREDENCIALES REALES DE SUPABASE**
-        url = "https://ekyfwvxmkagwaonrbafk.supabase.co" # Reemplaza con tu URL
-        key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVreWZ3dnhta2Fnd2FvbnJiYWZrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ2NjE5MTIsImV4cCI6MjA4MDIzNzkxMn0.VD1QFtqxHAkfp1D_TQj4GUCD8YKzmu14oQMpiOkrDX0" # Reemplaza con tu Service Key
+        url = "https://ekyfwvxmkagwaonrbafk.supabase.co"
+        key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVreWZ3dnhta2Fnd2FvbnJiYWZrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ2NjE5MTIsImV4cCI6MjA4MDIzNzkxMn0.VD1QFtqxHAkfp1D_TQj4GUCD8YKzmu14oQMpiOkrDX0"
         
         supabase: Client = create_client(url, key)
 
-        # --- LÓGICA DE GUARDADO ESPECÍFICA PARA MOTOROLA ---
         if tabla == "Cuestionario_Motorola":
             supabase_data = {
                 "jefe_evaluado": datos.get("jefe_evaluado"),
-                "p1_frecuencia_acompañamiento": datos.get("p1_frecuencia_acompañamiento"),
-                "p2_calidad_feedback": datos.get("p2_calidad_feedback"),
-                "p3_sentimiento_escucha": datos.get("p3_sentimiento_escucha"),
-                "p4_comunicacion_objetivos": datos.get("p4_comunicacion_objetivos"),
-                "p5_disposicion_apoyo": datos.get("p5_disposicion_apoyo"),
-                "p6_reconocimiento_logros": datos.get("p6_reconocimiento_logros"),
-                "p7_ambiente_colaborativo": datos.get("p7_ambiente_colaborativo"),
-                "p8_efectividad_liderazgo": datos.get("p8_efectividad_liderazgo"),
+                "p1_comunicacion_clara": datos.get("p1_comunicacion_clara"),
+                "p2_comunicacion_abierta": datos.get("p2_comunicacion_abierta"),
+                "p3_retro_frecuente": datos.get("p3_retro_frecuente"),
+                "p4_retro_constructiva": datos.get("p4_retro_constructiva"),
+                "p5_indicadores_claros": datos.get("p5_indicadores_claros"),
+                "p6_indicadores_mejora": datos.get("p6_indicadores_mejora"),
+                "p7_admin_facilita": datos.get("p7_admin_facilita"),
+                "p8_admin_herramientas": datos.get("p8_admin_herramientas"),
+                "p9_trato_respeto": datos.get("p9_trato_respeto"),
+                "p10_trato_ambiente": datos.get("p10_trato_ambiente"),
+                "p11_desarrollo_oportunidades": datos.get("p11_desarrollo_oportunidades"),
+                "p12_desarrollo_aprendizaje": datos.get("p12_desarrollo_aprendizaje"),
+                "p13_motivacion_reconocimiento": datos.get("p13_motivacion_reconocimiento"),
+                "p14_motivacion_confianza": datos.get("p14_motivacion_confianza"),
+                "p15_comentarios_abiertos": datos.get("p15_comentarios_abiertos"),
             }
-            
+
             with st.spinner("Guardando respuestas..."):
                 result = supabase.table(tabla).insert(supabase_data).execute()
             
             if result.data:
                 st.success("✅ ¡Datos de la encuesta de Liderazgo guardados exitosamente!")
-                if 'jefe_seleccionado' in st.session_state:
-                    del st.session_state['jefe_seleccionado']
                 st.balloons()
+                time.sleep(2)
+                
+                # IMPORTANTE: Limpiar TODAS las keys relacionadas con el formulario
+                keys_to_delete = [
+                    'jefe_seleccionado',
+                    'p1_q', 'p2_q', 'p3_q', 'p4_q', 'p5_q', 'p6_q', 'p7_q',
+                    'p8_q', 'p9_q', 'p10_q', 'p11_q', 'p12_q', 'p13_q', 'p14_q', 'p15_q'
+                ]
+                
+                for key in keys_to_delete:
+                    if key in st.session_state:
+                        del st.session_state[key]
+                
+                st.rerun()
                 return True
             else:
                 st.warning("⚠️ No se pudo confirmar el guardado de los datos.")
                 return False
-        
         else:
              st.warning(f"Tabla '{tabla}' no reconocida en la lógica de guardado.")
              return False
@@ -65,7 +82,6 @@ def guardar_en_supabase(datos, tabla):
         return False
 
 # --- FUNCIÓN DE LA ENCUESTA MOTOROLA LIDERAZGO ---
-
 def show_survey_motorola():
     
     # Lista de jefes
@@ -81,19 +97,13 @@ def show_survey_motorola():
     # ENCABEZADO DE LOGOS Y TÍTULO
     col_logo1, col_titulo, col_logo2 = st.columns([1.5, 5, 1.5])
     
-    # LADO IZQUIERDO: LOGO MOTOROLA
     with col_logo1:
-        # Uso de raw string (r"...") para la ruta de Windows
         st.image("https://i.pinimg.com/originals/7e/aa/7d/7eaa7db5ff7e2a11db308974ead0e43c.png") 
-        # Se eliminaron los placeholders
     
-    # CENTRO: TÍTULO PRINCIPAL
     with col_titulo:
-        st.markdown("<h1 style='text-align: center; color: white;'>Evaluación de Liderazgo</h1>", unsafe_allow_html=True)
+        st.markdown("<h1 style='text-align: center'>Evaluación de Liderazgo</h1>", unsafe_allow_html=True)
 
-    # LADO DERECHO: LOGO ADECCO
     with col_logo2:
-        # Se eliminaron los placeholders
         st.image("https://static.ybox.vn/2024/9/5/1725613931704-logo-adecco.png")
     
     st.markdown("---")
@@ -103,9 +113,9 @@ def show_survey_motorola():
     with st.form("form_motorola"):
         
         # 1. Lista Desplegable de Jefes
-        st.markdown("<h3 style='font-size: 20px;'>Selecciona el Lider a Evaluar: (*)</h3>", unsafe_allow_html=True)
+        st.markdown("<h3 style='font-size: 20px;'>Selecciona el Líder a Evaluar: (*)</h3>", unsafe_allow_html=True)
         jefe_evaluado = st.selectbox(
-            "Lider a Evaluar", 
+            "Líder a Evaluar", 
             options=JEFES, 
             index=0,
             key="jefe_seleccionado",
@@ -121,41 +131,88 @@ def show_survey_motorola():
         # Opciones de Rating (1-5)
         RATING_OPTIONS = [1, 2, 3, 4, 5]
         
-        # --- PREGUNTAS DE LA ENCUESTA (8) ---
+        # --- DIMENSIÓN: COMUNICACIÓN ---
+        st.markdown("##### 📢 COMUNICACIÓN")
         
-        st.markdown("### **Preguntas de Evaluación**")
+        st.markdown("<span style='font-size: 18px; font-weight: bold;'>Mi líder comunica de manera clara y oportuna información relevante. (*)</span>", unsafe_allow_html=True)
+        p1_comunicacion_clara = st.radio("P1", RATING_OPTIONS, index=None, key="p1_q", horizontal=True, label_visibility="collapsed")
         
-        # P1 - CAMBIO: Tamaño de fuente ajustado a 18px
-        st.markdown("<span style='font-size: 18px; font-weight: bold;'>1. ¿Con qué frecuencia tu líder te acompaña a campo o en tus actividades comerciales para observar y retroalimentar tu gestión? (*)</span>", unsafe_allow_html=True)
-        p1 = st.radio("P1", RATING_OPTIONS, index=None, key="p1_q", horizontal=True, label_visibility="collapsed")
+        st.markdown("<span style='font-size: 18px; font-weight: bold;'>Mi líder promueve espacios para una comunicación abierta y transparente. (*)</span>", unsafe_allow_html=True)
+        p2_comunicacion_abierta = st.radio("P2", RATING_OPTIONS, index=None, key="p2_q", horizontal=True, label_visibility="collapsed")
         
-        # P2 - CAMBIO: Tamaño de fuente ajustado a 18px
-        st.markdown("<span style='font-size: 18px; font-weight: bold;'>2. ¿Cómo calificarías la calidad del feedback que recibes por parte de tu líder (específico, constructivo y enfocado en mejorar tu desempeño)? (*)</span>", unsafe_allow_html=True)
-        p2 = st.radio("P2", RATING_OPTIONS, index=None, key="p2_q", horizontal=True, label_visibility="collapsed")
+        st.markdown("---")
         
-        # P3 - CAMBIO: Tamaño de fuente ajustado a 18px
-        st.markdown("<span style='font-size: 18px; font-weight: bold;'>3. ¿Te sientes escuchado(a) y comprendido(a) por tu líder cuando compartes ideas, inquietudes o necesidades relacionadas con tu trabajo? (*)</span>", unsafe_allow_html=True)
-        p3 = st.radio("P3", RATING_OPTIONS, index=None, key="p3_q", horizontal=True, label_visibility="collapsed")
+        # --- DIMENSIÓN: RETROALIMENTACIÓN ---
+        st.markdown("#### 💬 RETROALIMENTACIÓN")
         
-        # P4 - CAMBIO: Tamaño de fuente ajustado a 18px
-        st.markdown("<span style='font-size: 18px; font-weight: bold;'>4. ¿Tu líder comunica de manera clara y oportuna los objetivos, estrategias, incentivos y/o cambios relevantes para tu punto de venta? (*)</span>", unsafe_allow_html=True)
-        p4 = st.radio("P4", RATING_OPTIONS, index=None, key="p4_q", horizontal=True, label_visibility="collapsed")
+        st.markdown("<span style='font-size: 18px; font-weight: bold;'>Mi líder brinda retroalimentación frecuente sobre mi desempeño. (*)</span>", unsafe_allow_html=True)
+        p3_retro_frecuente = st.radio("P3", RATING_OPTIONS, index=None, key="p3_q", horizontal=True, label_visibility="collapsed")
         
-        # P5 - CAMBIO: Tamaño de fuente ajustado a 18px
-        st.markdown("<span style='font-size: 18px; font-weight: bold;'>5. ¿Cómo evalúas la disposición de tu líder para apoyarte en la resolución de problemas o situaciones difíciles en Pdv o procesos internos? (*)</span>", unsafe_allow_html=True)
-        p5 = st.radio("P5", RATING_OPTIONS, index=None, key="p5_q", horizontal=True, label_visibility="collapsed")
+        st.markdown("<span style='font-size: 18px; font-weight: bold;'>La retroalimentación que recibo es constructiva y me ayuda a mejorar. (*)</span>", unsafe_allow_html=True)
+        p4_retro_constructiva = st.radio("P4", RATING_OPTIONS, index=None, key="p4_q", horizontal=True, label_visibility="collapsed")
         
-        # P6 - CAMBIO: Tamaño de fuente ajustado a 18px
-        st.markdown("<span style='font-size: 18px; font-weight: bold;'>6. ¿Sientes que tu líder reconoce y valora tus logros y esfuerzos en el rol comercial? (*)</span>", unsafe_allow_html=True)
-        p6 = st.radio("P6", RATING_OPTIONS, index=None, key="p6_q", horizontal=True, label_visibility="collapsed")
+        st.markdown("---")
         
-        # P7 - CAMBIO: Tamaño de fuente ajustado a 18px
-        st.markdown("<span style='font-size: 18px; font-weight: bold;'>7. ¿Tu líder promueve un ambiente de trabajo colaborativo, motivador y orientado al cumplimiento de resultados? (*)</span>", unsafe_allow_html=True)
-        p7 = st.radio("P7", RATING_OPTIONS, index=None, key="p7_q", horizontal=True, label_visibility="collapsed")
+        # --- DIMENSIÓN: INDICADORES ---
+        st.markdown("#### 📊 INDICADORES")
         
-        # P8 - CAMBIO: Tamaño de fuente ajustado a 18px
-        st.markdown("<span style='font-size: 18px; font-weight: bold;'>8. ¿Qué tan efectivo consideras el liderazgo de tu jefe para impulsar el cumplimiento de las metas del equipo de ventas? (*)</span>", unsafe_allow_html=True)
-        p8 = st.radio("P8", RATING_OPTIONS, index=None, key="p8_q", horizontal=True, label_visibility="collapsed")
+        st.markdown("<span style='font-size: 18px; font-weight: bold;'>Mi líder explica claramente los indicadores que se usan para medir el desempeño. (*)</span>", unsafe_allow_html=True)
+        p5_indicadores_claros = st.radio("P5", RATING_OPTIONS, index=None, key="p5_q", horizontal=True, label_visibility="collapsed")
+        
+        st.markdown("<span style='font-size: 18px; font-weight: bold;'>Mi líder utiliza los indicadores para mejorar procesos y resultados. (*)</span>", unsafe_allow_html=True)
+        p6_indicadores_mejora = st.radio("P6", RATING_OPTIONS, index=None, key="p6_q", horizontal=True, label_visibility="collapsed")
+        
+        st.markdown("---")
+        
+        # --- DIMENSIÓN: ADMINISTRATIVO ---
+        st.markdown("#### 📋 ADMINISTRATIVO")
+        
+        st.markdown("<span style='font-size: 18px; font-weight: bold;'>Mi líder facilita la gestión de procesos administrativos. (*)</span>", unsafe_allow_html=True)
+        p7_admin_facilita = st.radio("P7", RATING_OPTIONS, index=None, key="p7_q", horizontal=True, label_visibility="collapsed")
+        
+        st.markdown("<span style='font-size: 18px; font-weight: bold;'>Mi líder conoce y maneja adecuadamente las herramientas administrativas. (*)</span>", unsafe_allow_html=True)
+        p8_admin_herramientas = st.radio("P8", RATING_OPTIONS, index=None, key="p8_q", horizontal=True, label_visibility="collapsed")
+        
+        st.markdown("---")
+        
+        # --- DIMENSIÓN: TRATO ---
+        st.markdown("#### 🤝 TRATO")
+        
+        st.markdown("<span style='font-size: 18px; font-weight: bold;'>Mi líder me trata con respeto, equidad y empatía. (*)</span>", unsafe_allow_html=True)
+        p9_trato_respeto = st.radio("P9", RATING_OPTIONS, index=None, key="p9_q", horizontal=True, label_visibility="collapsed")
+        
+        st.markdown("<span style='font-size: 18px; font-weight: bold;'>Mi líder promueve un ambiente laboral positivo y colaborativo. (*)</span>", unsafe_allow_html=True)
+        p10_trato_ambiente = st.radio("P10", RATING_OPTIONS, index=None, key="p10_q", horizontal=True, label_visibility="collapsed")
+        
+        st.markdown("---")
+        
+        # --- DIMENSIÓN: DESARROLLO DEL EQUIPO ---
+        st.markdown("#### 🚀 DESARROLLO DEL EQUIPO")
+        
+        st.markdown("<span style='font-size: 18px; font-weight: bold;'>Mi líder brinda oportunidades para mejorar mis competencias. (*)</span>", unsafe_allow_html=True)
+        p11_desarrollo_oportunidades = st.radio("P11", RATING_OPTIONS, index=None, key="p11_q", horizontal=True, label_visibility="collapsed")
+        
+        st.markdown("<span style='font-size: 18px; font-weight: bold;'>Mi líder fomenta el aprendizaje y crecimiento dentro del equipo. (*)</span>", unsafe_allow_html=True)
+        p12_desarrollo_aprendizaje = st.radio("P12", RATING_OPTIONS, index=None, key="p12_q", horizontal=True, label_visibility="collapsed")
+        
+        st.markdown("---")
+        
+        # --- DIMENSIÓN: MOTIVACIÓN E INSPIRACIÓN ---
+        st.markdown("#### ⭐ MOTIVACIÓN E INSPIRACIÓN")
+        
+        st.markdown("<span style='font-size: 18px; font-weight: bold;'>Mi líder reconoce los logros y motiva al equipo para alcanzarlos. (*)</span>", unsafe_allow_html=True)
+        p13_motivacion_reconocimiento = st.radio("P13", RATING_OPTIONS, index=None, key="p13_q", horizontal=True, label_visibility="collapsed")
+        
+        st.markdown("<span style='font-size: 18px; font-weight: bold;'>Mi líder inspira confianza y compromiso. (*)</span>", unsafe_allow_html=True)
+        p14_motivacion_confianza = st.radio("P14", RATING_OPTIONS, index=None, key="p14_q", horizontal=True, label_visibility="collapsed")
+        
+        st.markdown("---")
+        
+        # --- PREGUNTA ABIERTA ---
+        st.markdown("#### 💭 PREGUNTA ABIERTA")
+        
+        st.markdown("<span style='font-size: 18px; font-weight: bold;'>¿Qué aspectos consideras que tu líder podría mejorar?</span>", unsafe_allow_html=True)
+        p15_abierta = st.text_area("Comentarios adicionales", key="p15_q", label_visibility="collapsed", height=120)
 
         st.markdown("---")
         
@@ -165,29 +222,43 @@ def show_survey_motorola():
             # Validaciones de formulario
             if jefe_evaluado == JEFES[0]:
                 st.error("⚠️ Por favor, selecciona el nombre del jefe/a a evaluar.")
-            elif any(q is None for q in [p1, p2, p3, p4, p5, p6, p7, p8]):
+            elif any(q is None for q in [p1_comunicacion_clara, p2_comunicacion_abierta, p3_retro_frecuente, 
+                                          p4_retro_constructiva, p5_indicadores_claros, p6_indicadores_mejora,
+                                          p7_admin_facilita, p8_admin_herramientas, p9_trato_respeto,
+                                          p10_trato_ambiente, p11_desarrollo_oportunidades, p12_desarrollo_aprendizaje,
+                                          p13_motivacion_reconocimiento, p14_motivacion_confianza]):
                 st.error("⚠️ Por favor, responde a todas las preguntas de la encuesta (califica del 1 al 5).")
             else:
                 # Payload con los datos de la encuesta
                 data_payload = {
                     "jefe_evaluado": jefe_evaluado,
-                    "p1_frecuencia_acompañamiento": p1,
-                    "p2_calidad_feedback": p2,
-                    "p3_sentimiento_escucha": p3,
-                    "p4_comunicacion_objetivos": p4,
-                    "p5_disposicion_apoyo": p5,
-                    "p6_reconocimiento_logros": p6,
-                    "p7_ambiente_colaborativo": p7,
-                    "p8_efectividad_liderazgo": p8,
+                    "p1_comunicacion_clara": p1_comunicacion_clara,
+                    "p2_comunicacion_abierta": p2_comunicacion_abierta,
+                    "p3_retro_frecuente": p3_retro_frecuente,
+                    "p4_retro_constructiva": p4_retro_constructiva,
+                    "p5_indicadores_claros": p5_indicadores_claros,
+                    "p6_indicadores_mejora": p6_indicadores_mejora,
+                    "p7_admin_facilita": p7_admin_facilita,
+                    "p8_admin_herramientas": p8_admin_herramientas,
+                    "p9_trato_respeto": p9_trato_respeto,
+                    "p10_trato_ambiente": p10_trato_ambiente,
+                    "p11_desarrollo_oportunidades": p11_desarrollo_oportunidades,
+                    "p12_desarrollo_aprendizaje": p12_desarrollo_aprendizaje,
+                    "p13_motivacion_reconocimiento": p13_motivacion_reconocimiento,
+                    "p14_motivacion_confianza": p14_motivacion_confianza,
+                    "p15_comentarios_abiertos": p15_abierta if p15_abierta else None
                 }
                 
                 # Llamar a la función de guardado
                 guardar_en_supabase(data_payload, "Cuestionario_Motorola")
+                
+
 
 # --- NAVEGACIÓN PRINCIPAL (MAIN) ---
 def main():
     show_survey_motorola()
 
+
 # Ejecutar la aplicación
 if __name__ == '__main__':
-    main()  
+    main()
