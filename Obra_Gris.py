@@ -6,7 +6,7 @@ from io import BytesIO
 
 # --- CONFIGURACIÓN INICIAL ---
 st.set_page_config(
-    page_title="NPS Zonamerica 2024 – Obra Gris", 
+    page_title="NPS Zonamerica 2025 - Obra Gris", 
     page_icon="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAcCAMAAABF0y+mAAAAKlBMVEVHcEwwrGgwrGgwrGgwrGgwrGgwrGgwrGgwrGgwrGgwrGgwrGgwrGgwrGjV3fMIAAAADXRSTlMATcoq3TlrrwhiivAW61nCVAAAAJ9JREFUKJHNkUsSxCAIREURxMT7X3ckxM9osp2a3hh8dtEQ5/5XwJ7hhfmiyvqZQGKaWSim4E575tPqPBhLk//yEkU9G8T7PgrdUSAfpTdQiRUZMhaWpLGRyR5z70LnOkLsTK46hTBg7hDrLVxpfVidPYkqtrXZVLWkiY4JAWwdk3nf8uSUDY7dlbDB0dRvbCwEH1iNrj8H6ZGp0iv5hT6F0gp3kbmSPQAAAABJRU5ErkJggg==", 
     layout="centered"
 )
@@ -144,7 +144,7 @@ def show_survey_obra_gris():
         st.image("https://cdn.brandfetch.io/ida2XlnzHx/theme/dark/logo.svg?c=1bxid64Mup7aczewSAYMX&t=1680282084001", width=200)
     
     # Encabezado principal del formulario
-    st.title("NPS Zonamerica 2024 – OBRA GRIS")
+    st.title("NPS Zonamerica 2025 - OBRA GRIS")
     st.header("¡Queremos conocer tu experiencia con nosotros!")
     
     # Mensaje introductorio
