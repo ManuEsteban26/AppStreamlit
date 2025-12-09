@@ -200,7 +200,7 @@ def show_survey_comunidad():
             sg_telefono = st.selectbox("Teléfono, Impresiones, Icloud", [1, 2, 3, 4, 5], index=2, key="com_sg_tel")
 
         # Pregunta 9: Amenities
-        st.markdown("<h4 style='font-size: 20px;'>9. Amenities</h4>", unsafe_allow_html=True)
+        st.markdown("<h4 style='font-size: 20px;'>9. Amanetíes</h4>", unsafe_allow_html=True)
         st.caption("En una escala del 1 al 5, siendo 1=muy insatisfecho y 5=muy satisfecho, califica: (*)")
         
         col9_a, col9_b = st.columns(2)
