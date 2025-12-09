@@ -108,7 +108,7 @@ def show_survey_comunidad():
     st.markdown("""
     Este contenido lo creó el propietario del formulario. Los datos que envíes se enviarán al propietario del formulario.
     
-    No somos responsables de las prácticas de privacidad o seguridad de sus clientes, incluidas las que adopte el propietario de este formulario. Nunca comparta su contraseña.
+    Adecco no se hace responsable de las prácticas de privacidad o seguridad de sus clientes, incluidas las que adopte el propietario de este formulario.
     
     Sus datos personales serán tratados conforme a los lineamientos establecidos en nuestra 
     [Política de Protección de Datos Personales](https://web.zonamerica.com/colombia/wp-content/uploads/2022/11/JUR.PO_.01-Politica-de-Tratamiento-de-Datos-Personales-v1.pdf)
