@@ -157,7 +157,10 @@ def show_survey_bc():
     Sus datos personales serán tratados conforme a los lineamientos establecidos en nuestra 
     [Política de Protección de Datos Personales](https://web.zonamerica.com/colombia/wp-content/uploads/2022/11/JUR.PO_.01-Politica-de-Tratamiento-de-Datos-Personales-v1.pdf)
     
-    **¡Gracias por su participación!**
+    **Te invitamos a participar en esta encuesta.**
+
+    Tus respuestas son muy valiosas para nosotros. A continuación, encontrarás una serie de preguntas en las que deberás seleccionar una opción en escalas del 1 al 5, del 1 al 10 según corresponda, así como preguntas abiertas
+    Gracias por ayudarnos a mejorar.
     """)
     
     st.markdown("---")
