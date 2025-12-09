@@ -12,7 +12,7 @@ st.set_page_config(
 )
 
 # --- FUNCIÓN GUARDAR EN SUPABASE (Solo para Obra Gris) ---
-def guardar_en_supabase(datos, tabla):
+def guardar_en_supabase(datos,tabla):
     """
     Guarda los datos de la encuesta en Supabase.
     """
@@ -22,6 +22,7 @@ def guardar_en_supabase(datos, tabla):
         url = "https://ekyfwvxmkagwaonrbafk.supabase.co"
         key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVreWZ3dnhta2Fnd2FvbnJiYWZrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ2NjE5MTIsImV4cCI6MjA4MDIzNzkxMn0.VD1QFtqxHAkfp1D_TQj4GUCD8YKzmu14oQMpiOkrDX0"
         supabase: Client = create_client(url, key)
+
 
         if tabla == "Cuestionario_Obra_Gris":
             # Mapear los datos al esquema de la tabla Cuestionario_Obra_Gris
@@ -122,8 +123,6 @@ def guardar_en_supabase(datos, tabla):
             
             if result.data:
                 st.success("✅ ¡Datos guardados exitosamente!")
-                st.balloons()
-                time.sleep(2)
                 return True
             else:
                 st.warning("⚠️ No se pudo confirmar el guardado de los datos")
@@ -133,7 +132,7 @@ def guardar_en_supabase(datos, tabla):
         st.error(f"❌ Error al guardar: {e}")
         # Mostrar datos para depuración en caso de error
         with st.expander("Ver datos que se intentaron guardar"):
-            st.json(datos)
+            st.json(supabase_data)
         return False
 
 # --- ENCUESTA 2: OBRA GRIS ---
@@ -143,101 +142,102 @@ def show_survey_obra_gris():
         st.image("https://web.zonamerica.com/colombia/wp-content/themes/zaco/assets/img/logo.png", width=200)
     with col3:
         st.image("https://cdn.brandfetch.io/ida2XlnzHx/theme/dark/logo.svg?c=1bxid64Mup7aczewSAYMX&t=1680282084001", width=200)
-
+    
     # Encabezado principal del formulario
-    st.title("NPS Zonamerica 2024 – Obra Gris")
-
+    st.title("NPS Zonamerica 2024 – OBRA GRIS")
+    st.header("¡Queremos conocer tu experiencia con nosotros!")
+    
     # Mensaje introductorio
     st.markdown("""
     Este contenido lo creó el propietario del formulario. Los datos que envíes se enviarán al propietario del formulario.
-
+    
     No somos responsables de las prácticas de privacidad o seguridad de sus clientes, incluidas las que adopte el propietario de este formulario. Nunca comparta su contraseña.
-
-    Sus datos personales serán tratados conforme a los lineamientos establecidos en nuestra
+    
+    Sus datos personales serán tratados conforme a los lineamientos establecidos en nuestra 
     [Política de Protección de Datos Personales](https://web.zonamerica.com/colombia/wp-content/uploads/2022/11/JUR.PO_.01-Politica-de-Tratamiento-de-Datos-Personales-v1.pdf)
-
+    
     **¡Gracias por su participación!**
     """)
-
+    
     st.markdown("---")
 
     with st.form("form_obra_gris"):
         # Pregunta 1: Política de datos
         st.markdown("<h4 style='font-size: 20px;'>1. Usted acepta la política de tratamiento de datos. (*)</h4>", unsafe_allow_html=True)
-        aceptacion = st.radio("", ["Sí", "No"], horizontal=True, label_visibility="collapsed", key="og_aceptacion")
+        aceptacion = st.radio("", ["Sí", "No"], horizontal=True, label_visibility="collapsed")
 
         # Pregunta 2: Razón social
         st.markdown("<h4 style='font-size: 20px;'>2. Escriba la razón social de su Organización/Empresa. (*)</h4>", unsafe_allow_html=True)
-        razon_social = st.text_input("Razón Social", label_visibility="collapsed", key="og_razon_social")
-
+        razon_social = st.text_input("Razón Social", label_visibility="collapsed")
+        
         # Pregunta 3: Nombre
         st.markdown("<h4 style='font-size: 20px;'>3. Escriba su nombre y apellidos. (*)</h4>", unsafe_allow_html=True)
-        nombre_completo = st.text_input("Nombre completo", label_visibility="collapsed", key="og_nombre_completo")
+        nombre_completo = st.text_input("Nombre completo", label_visibility="collapsed")
 
         st.markdown("---")
-
+        
         # Pregunta 4: Comunicación y Soporte
         st.markdown("<h4 style='font-size: 20px;'>4. Comunicación y Soporte</h4>", unsafe_allow_html=True)
         st.caption("En una escala del 1 al 5, siendo 1=muy insatisfecho y 5=muy satisfecho, califica: (*)")
-
+        
         st.markdown("**4.1** ¿Cómo evalúas la comunicación proporcionada por la administración de la Zonamerica?")
         comunicacion_4_1 = st.selectbox("4.1", [1, 2, 3, 4, 5], index=2, key="og_com_4_1", label_visibility="collapsed")
-
+        
         st.markdown("**4.2** ¿Estás satisfecho con el nivel de soporte ofrecido por la zona franca?")
         comunicacion_4_2 = st.selectbox("4.2", [1, 2, 3, 4, 5], index=2, key="og_com_4_2", label_visibility="collapsed")
 
         # Pregunta 5: Fiabilidad
         st.markdown("<h4 style='font-size: 20px;'>5. Fiabilidad</h4>", unsafe_allow_html=True)
         st.caption("En una escala del 1 al 5, siendo 1=muy insatisfecho y 5=muy satisfecho, califica: (*)")
-
+        
         st.markdown("**5.1** Zonamerica resuelve íntegramente sus necesidades como usuario/cliente.")
         fiabilidad_5_1 = st.selectbox("5.1", [1, 2, 3, 4, 5], index=2, key="og_fia_5_1", label_visibility="collapsed")
-
+        
         st.markdown("**5.2** La capacidad de Zonamerica para cumplir con los acuerdos establecidos ha influido en la toma de decisiones estratégicas de tu empresa.")
         fiabilidad_5_2 = st.selectbox("5.2", [1, 2, 3, 4, 5], index=2, key="og_fia_5_2", label_visibility="collapsed")
 
         # Pregunta 6: Capacidad de respuesta
         st.markdown("<h4 style='font-size: 20px;'>6. Capacidad de respuesta</h4>", unsafe_allow_html=True)
         st.caption("En una escala del 1 al 5, siendo 1=muy insatisfecho y 5=muy satisfecho, califica: (*)")
-
+        
         st.markdown("**6.1** ¿Te sientes satisfecho/a con la velocidad y eficacia de la respuesta a tus solicitudes y necesidades por parte de la administración de Zonamerica?")
         capacidad_6_1 = st.selectbox("6.1", [1, 2, 3, 4, 5], index=2, key="og_cap_6_1", label_visibility="collapsed")
-
+        
         st.markdown("**6.2** ¿La capacidad de respuesta ágil de Zonamerica ha influido en la eficiencia operativa de tu empresa?")
         capacidad_6_2 = st.selectbox("6.2", [1, 2, 3, 4, 5], index=2, key="og_cap_6_2", label_visibility="collapsed")
 
         # Pregunta 7: Confianza
         st.markdown("<h4 style='font-size: 20px;'>7. Confianza</h4>", unsafe_allow_html=True)
         st.caption("En una escala del 1 al 5, siendo 1=muy insatisfecho y 5=muy satisfecho, califica: (*)")
-
+        
         st.markdown("**7.1** ¿La integridad y ética empresarial de Zonamerica han contribuido a consolidar la confianza de tu empresa en su relación?")
         confianza_7_1 = st.selectbox("7.1", [1, 2, 3, 4, 5], index=2, key="og_con_7_1", label_visibility="collapsed")
-
+        
         st.markdown("**7.2** ¿El equipo humano de Zonamerica, es amable y diligente e infunde confianza en usted?")
         confianza_7_2 = st.selectbox("7.2", [1, 2, 3, 4, 5], index=2, key="og_con_7_2", label_visibility="collapsed")
 
         # Pregunta 8: Empatía
         st.markdown("<h4 style='font-size: 20px;'>8. Empatía</h4>", unsafe_allow_html=True)
         st.caption("En una escala del 1 al 5, siendo 1=muy insatisfecho y 5=muy satisfecho, califica: (*)")
-
+        
         st.markdown("**8.1** Zonamerica comprende y se preocupa por las necesidades específicas de tu empresa.")
         empatia_8_1 = st.selectbox("8.1", [1, 2, 3, 4, 5], index=2, key="og_emp_8_1", label_visibility="collapsed")
-
+        
         st.markdown("**8.2** Zonamerica demuestra sensibilidad hacia las circunstancias individuales de las empresas establecidas en ella.")
         empatia_8_2 = st.selectbox("8.2", [1, 2, 3, 4, 5], index=2, key="og_emp_8_2", label_visibility="collapsed")
 
         # Pregunta 9: Elementos Tangibles
         st.markdown("<h4 style='font-size: 20px;'>9. Elementos Tangibles</h4>", unsafe_allow_html=True)
         st.caption("En una escala del 1 al 5, siendo 1=muy insatisfecho y 5=muy satisfecho, califica: (*)")
-
+        
         st.markdown("**9.1** Las oficinas y espacios de trabajo, cumplen con tus expectativas y necesidades empresariales.")
         tangibles_9_1 = st.selectbox("9.1", [1, 2, 3, 4, 5], index=2, key="og_tan_9_1", label_visibility="collapsed")
-
+        
         st.markdown("**9.2** La calidad de las instalaciones y servicios de Zonamerica ha impactado positivamente en la imagen y operación de tu empresa.")
         tangibles_9_2 = st.selectbox("9.2", [1, 2, 3, 4, 5], index=2, key="og_tan_9_2", label_visibility="collapsed")
 
         st.markdown("---")
-
+        
         # Pregunta 10: Área de Tecnología/TIC'S
         st.markdown("<h4 style='font-size: 20px;'>10. Área de Tecnología/TIC'S</h4>", unsafe_allow_html=True)
         st.caption("En una escala del 1 al 5, siendo 1=muy insatisfecho y 5=muy satisfecho, califica: (*)")
@@ -293,22 +293,22 @@ def show_survey_obra_gris():
         with col14_3:
             gci_atencion = st.selectbox("Atención del personal", [1, 2, 3, 4, 5], index=2, key="og_gci_atencion")
 
-        # Pregunta 15: Servicios Contratados
+        # Pregunta 15: Servicios Contratados (diferente a BC)
         st.markdown("<h4 style='font-size: 20px;'>15. Servicios Contratados</h4>", unsafe_allow_html=True)
-        st.caption("En una escala del 1 al 5, siendo 1=muy insatisfecho y 5=muy satisfecho, califica el nivel de satisfacción de su empresa en relación a los siguientes servicios que ofrece Zonamerica: (*)")
+        st.caption("De acuerdo con los servicios que recibe de Zonamerica ¿Cuál diría que es el Nivel de satisfacción de su empresa en relación con los siguientes servicios que contrata con Zonamerica? (*)")
         col15_a, col15_b = st.columns(2)
         with col15_a:
-            sc_limpieza = st.selectbox("Limpieza y mantenimiento", [1, 2, 3, 4, 5], index=2, key="og_sc_limp")
-            sc_aire = st.selectbox("Aire acondicionado", [1, 2, 3, 4, 5], index=2, key="og_sc_aire")
-            sc_telefonia = st.selectbox("Telefonía", [1, 2, 3, 4, 5], index=2, key="og_sc_tel")
+            sc_limpieza = st.selectbox("Limpieza de su oficina/local", [1, 2, 3, 4, 5], index=2, key="og_sc_limp")
+            sc_aire = st.selectbox("Aire Acondicionado", [1, 2, 3, 4, 5], index=2, key="og_sc_aire")
+            sc_telefonia = st.selectbox("Servicio de Telefonía", [1, 2, 3, 4, 5], index=2, key="og_sc_tel")
         with col15_b:
-            sc_internet = st.selectbox("Internet y datos", [1, 2, 3, 4, 5], index=2, key="og_sc_int")
-            sc_impresiones = st.selectbox("Servicio de impresiones", [1, 2, 3, 4, 5], index=2, key="og_sc_imp")
-            sc_vigilancia = st.selectbox("Vigilancia y seguridad", [1, 2, 3, 4, 5], index=2, key="og_sc_vig")
+            sc_internet = st.selectbox("Servicio de Internet y Datos", [1, 2, 3, 4, 5], index=2, key="og_sc_int")
+            sc_impresiones = st.selectbox("Servicios de Impresiones", [1, 2, 3, 4, 5], index=2, key="og_sc_imp")
+            sc_vigilancia = st.selectbox("Servicio de vigilancia de su local", [1, 2, 3, 4, 5], index=2, key="og_sc_vig")
 
-        # Pregunta 16: Servicios Generales Zonamerica
-        st.markdown("<h4 style='font-size: 20px;'>16. Servicios Generales Zonamerica</h4>", unsafe_allow_html=True)
-        st.caption("En una escala del 1 al 5, siendo 1=muy insatisfecho y 5=muy satisfecho, califica el nivel de satisfacción de su empresa en relación a los siguientes servicios que ofrece Zonamerica? (*)")
+        # Pregunta 16: Nivel de satisfacción servicios generales
+        st.markdown("<h4 style='font-size: 20px;'>16. Nivel de satisfacción - Servicios Generales</h4>", unsafe_allow_html=True)
+        st.caption("En términos generales, ¿Cuál diría que es el Nivel de satisfacción de su empresa en relación a los siguientes servicios que ofrece Zonamerica? (*)")
         col16_a, col16_b = st.columns(2)
         with col16_a:
             gen_proceso = st.selectbox("Proceso de Registro e Ingreso de Funcionarios, Visitantes y Proveedores", [1, 2, 3, 4, 5], index=2, key="og_gen_proc")
@@ -319,7 +319,7 @@ def show_survey_obra_gris():
             gen_actividades = st.selectbox("Actividades promovidas por Zonamerica para el bienestar de la comunidad", [1, 2, 3, 4, 5], index=2, key="og_gen_act")
             gen_mantenimiento = st.selectbox("Mantenimiento y limpieza de la infraestructura de Zonamerica", [1, 2, 3, 4, 5], index=2, key="og_gen_mant")
 
-        # Pregunta 17: Necesidades del Personal
+        # Pregunta 17: Nivel de satisfacción - Necesidades del personal
         st.markdown("<h4 style='font-size: 20px;'>17. Necesidades del Personal</h4>", unsafe_allow_html=True)
         st.caption("Teniendo en cuenta las necesidades de su personal, por favor califique su Nivel de Satisfacción: (*)")
         col17_a, col17_b = st.columns(2)
@@ -337,22 +337,21 @@ def show_survey_obra_gris():
         st.markdown("<h4 style='font-size: 20px;'>18. ¿En general, qué tan satisfecho está con Zonamerica? (*)</h4>", unsafe_allow_html=True)
         satisfaccion_general = st.selectbox("Satisfacción general", [1, 2, 3, 4, 5], index=2, key="og_sat_gen", label_visibility="collapsed")
 
-        # Pregunta 19: Sugerencias de Servicios para 2025
-        st.markdown("<h4 style='font-size: 20px;'>19. Sugerencias de Servicios para 2025 (*)</h4>", unsafe_allow_html=True)
-        st.caption("¿Cuáles nuevos servicios o mejoramientos propondría usted para el 2025?")
-        servicios_2025 = st.text_area("Sugerencias 2025", key="og_sug_2025", label_visibility="collapsed")
+        # Pregunta 19: Servicios nuevos 2025
+        st.markdown("<h4 style='font-size: 20px;'>19. ¿Qué tipo de servicios nuevos o mejorados le gustaría ver de nuestra empresa en 2025? (*)</h4>", unsafe_allow_html=True)
+        servicios_2025 = st.text_area("Servicios 2025", key="og_serv_2025", label_visibility="collapsed")
 
-        # Pregunta 20: Observaciones - Servicios Generales
+        # Pregunta 20: Observaciones servicios generales
         st.markdown("<h4 style='font-size: 20px;'>20. Observaciones - Servicios Generales (*)</h4>", unsafe_allow_html=True)
         st.caption("Con respecto a los Servicios Generales, por favor amplíe sus observaciones y/o sugerencias.")
-        obs_servicios_gen = st.text_area("Observaciones servicios generales", key="og_obs_serv_gen", label_visibility="collapsed")
+        obs_servicios_generales = st.text_area("Observaciones generales", key="og_obs_gen", label_visibility="collapsed")
 
-        # Pregunta 21: Observaciones - Servicios Contratados
+        # Pregunta 21: Observaciones Servicios Contratados (diferente a BC)
         st.markdown("<h4 style='font-size: 20px;'>21. Observaciones - Servicios Contratados (*)</h4>", unsafe_allow_html=True)
-        st.caption("Con respecto a los Servicios Contratados, por favor amplíe sus observaciones y/o sugerencias.")
-        obs_servicios_cont = st.text_area("Observaciones servicios contratados", key="og_obs_serv_cont", label_visibility="collapsed")
+        st.caption("Con respecto a los Servicios Contratados por favor amplíe sus observaciones y/o sugerencias.")
+        obs_servicios_contratados = st.text_area("Observaciones SC", key="og_obs_sc", label_visibility="collapsed")
 
-        # Pregunta 22: Observaciones - Amenities
+        # Pregunta 22: Observaciones Amenities
         st.markdown("<h4 style='font-size: 20px;'>22. Observaciones - Amenities (*)</h4>", unsafe_allow_html=True)
         st.caption("Con respecto a los Amenities y/o empresas de apoyo, por favor amplíe sus observaciones y/o sugerencias.")
         obs_amenities = st.text_area("Observaciones amenities", key="og_obs_amen", label_visibility="collapsed")
@@ -362,9 +361,7 @@ def show_survey_obra_gris():
         emocion = st.radio(
             "Emoción",
             ["Feliz 😄", "Encantado 🤩", "Neutral 😐", "Decepcionado 😞", "Molesto 😠"],
-            horizontal=True,
-            key="og_emocion",
-            label_visibility="collapsed"
+            horizontal=True, key="og_emocion", label_visibility="collapsed"
         )
 
         # Pregunta 24: NPS
@@ -429,13 +426,17 @@ def show_survey_obra_gris():
                     "p17_esparcimiento": pers_esparcimiento,
                     "p18_satisfaccion_general": satisfaccion_general,
                     "p19_servicios_2025": servicios_2025,
-                    "p20_obs_servicios_generales": obs_servicios_gen,
-                    "p21_obs_servicios_contratados": obs_servicios_cont,
+                    "p20_obs_servicios_generales": obs_servicios_generales,
+                    "p21_obs_servicios_contratados": obs_servicios_contratados,
                     "p22_obs_amenities": obs_amenities,
                     "p23_emocion": emocion,
                     "p24_nps": nps
                 }
-                guardar_en_supabase(data_payload, "Cuestionario_Obra_Gris")
+
+                if guardar_en_supabase(data_payload, "Cuestionario_Obra_Gris"):
+                    st.balloons()
+                    time.sleep(2)
+
 
 if __name__ == '__main__':
     show_survey_obra_gris()

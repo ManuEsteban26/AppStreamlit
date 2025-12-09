@@ -12,7 +12,7 @@ st.set_page_config(
 )
 
 # --- FUNCIÓN GUARDAR EN SUPABASE (Solo para BC) ---
-def guardar_en_supabase(datos, tabla):
+def guardar_en_supabase(datos,tabla):
     """
     Guarda los datos de la encuesta en Supabase.
     """
@@ -125,18 +125,15 @@ def guardar_en_supabase(datos, tabla):
             
             if result.data:
                 st.success("✅ ¡Datos guardados exitosamente!")
-                st.balloons()
-                time.sleep(2)
                 return True
             else:
                 st.warning("⚠️ No se pudo confirmar el guardado de los datos")
                 return False
-            
     except Exception as e:
         st.error(f"❌ Error al guardar: {e}")
         # Mostrar datos para depuración en caso de error
         with st.expander("Ver datos que se intentaron guardar"):
-            st.json(datos)
+            st.json(supabase_data)
         return False
 
 # --- ENCUESTA 1: BUSINESS CENTER (BC) ---
@@ -146,9 +143,10 @@ def show_survey_bc():
         st.image("https://web.zonamerica.com/colombia/wp-content/themes/zaco/assets/img/logo.png", width=200)
     with col3:
         st.image("https://cdn.brandfetch.io/ida2XlnzHx/theme/dark/logo.svg?c=1bxid64Mup7aczewSAYMX&t=1680282084001", width=200)
-
+    
     # Encabezado principal del formulario
-    st.title("NPS Zonamerica 2024 – Bussines Center")
+    st.title("NPS Zonamerica 2024 – BC")
+    st.header("1. ¡Queremos conocer tu experiencia con nosotros!")
     
     # Mensaje introductorio
     st.markdown("""
@@ -167,15 +165,15 @@ def show_survey_bc():
     with st.form("form_bc"):
         # Pregunta 1: Política de datos
         st.markdown("<h4 style='font-size: 20px;'>1. Usted acepta la política de tratamiento de datos. (*)</h4>", unsafe_allow_html=True)
-        aceptacion = st.radio("", ["Sí", "No"], horizontal=True, key="bc_aceptacion", label_visibility="collapsed")
+        aceptacion = st.radio("", ["Sí", "No"], horizontal=True, label_visibility="collapsed")
 
         # Pregunta 2: Razón social
         st.markdown("<h4 style='font-size: 20px;'>2. Escriba la razón social de su Organización/Empresa. (*)</h4>", unsafe_allow_html=True)
-        razon_social = st.text_input("Razón Social", key="bc_razon_social", label_visibility="collapsed")
+        razon_social = st.text_input("Razón Social", label_visibility="collapsed")
         
         # Pregunta 3: Nombre
         st.markdown("<h4 style='font-size: 20px;'>3. Escriba su nombre y apellidos. (*)</h4>", unsafe_allow_html=True)
-        nombre_completo = st.text_input("Nombre completo", key="bc_nombre_completo", label_visibility="collapsed")
+        nombre_completo = st.text_input("Nombre completo", label_visibility="collapsed")
 
         st.markdown("---")
         
@@ -298,32 +296,32 @@ def show_survey_bc():
 
         # Pregunta 15: Servicios Business Center
         st.markdown("<h4 style='font-size: 20px;'>15. Servicios Business Center</h4>", unsafe_allow_html=True)
-        st.caption("En una escala del 1 al 5, siendo 1=muy insatisfecho y 5=muy satisfecho, califica el nivel de satisfacción de su empresa en relación a los siguientes servicios que ofrece Zonamerica: (*)")
+        st.caption("En una escala del 1 al 5, siendo 1=muy insatisfecho y 5=muy satisfecho, califica: (*)")
         col15_a, col15_b = st.columns(2)
         with col15_a:
-            bc_mobiliario = st.selectbox("Mobiliario", [1, 2, 3, 4, 5], index=2, key="bc_mob") 
-            bc_limpieza = st.selectbox("Limpieza y mantenimiento", [1, 2, 3, 4, 5], index=2, key="bc_limp") 
-            bc_aire = st.selectbox("Aire acondicionado", [1, 2, 3, 4, 5], index=2, key="bc_aire") 
-            bc_telefonia = st.selectbox("Telefonía", [1, 2, 3, 4, 5], index=2, key="bc_tel") 
+            bc_mobiliario = st.selectbox("Mobiliario", [1, 2, 3, 4, 5], index=2, key="bc_mob")
+            bc_limpieza = st.selectbox("Calidad de Limpieza", [1, 2, 3, 4, 5], index=2, key="bc_limp")
+            bc_aire = st.selectbox("Aire Acondicionado", [1, 2, 3, 4, 5], index=2, key="bc_aire")
+            bc_telefonia = st.selectbox("Servicio de Telefonía", [1, 2, 3, 4, 5], index=2, key="bc_tel")
         with col15_b:
-            bc_internet = st.selectbox("Internet y datos", [1, 2, 3, 4, 5], index=2, key="bc_int") 
-            bc_impresiones = st.selectbox("Servicio de impresiones", [1, 2, 3, 4, 5], index=2, key="bc_imp") 
-            bc_cliente = st.selectbox("Atención al cliente", [1, 2, 3, 4, 5], index=2, key="bc_atc") 
-            bc_reuniones = st.selectbox("Sala de reuniones", [1, 2, 3, 4, 5], index=2, key="bc_reun")
+            bc_internet = st.selectbox("Servicio de Internet y Datos", [1, 2, 3, 4, 5], index=2, key="bc_int")
+            bc_impresiones = st.selectbox("Servicios de Impresiones", [1, 2, 3, 4, 5], index=2, key="bc_imp")
+            bc_atencion = st.selectbox("Calidad y Disponibilidad del equipo de Atención al Cliente", [1, 2, 3, 4, 5], index=2, key="bc_atc")
+            bc_salas = st.selectbox("Calidad y Disponibilidad del servicio de sala de reuniones", [1, 2, 3, 4, 5], index=2, key="bc_salas")
 
-        # Pregunta 16: Servicios Generales Zonamerica
-        st.markdown("<h4 style='font-size: 20px;'>16. Servicios Generales Zonamerica</h4>", unsafe_allow_html=True)
-        st.caption("En una escala del 1 al 5, siendo 1=muy insatisfecho y 5=muy satisfecho, califica el nivel de satisfacción de su empresa en relación a los siguientes servicios que ofrece Zonamerica: (*)")
+        # Pregunta 16: Nivel de satisfacción servicios generales
+        st.markdown("<h4 style='font-size: 20px;'>16. Nivel de satisfacción - Servicios Generales</h4>", unsafe_allow_html=True)
+        st.caption("En términos generales, ¿Cuál diría que es el Nivel de satisfacción de su empresa en relación a los siguientes servicios que ofrece Zonamerica? (*)")
         col16_a, col16_b = st.columns(2)
         with col16_a:
-            gen_proceso = st.selectbox("Proceso de Registro e Ingreso de Funcionarios, Visitantes y Proveedores", [1, 2, 3, 4, 5], index=2, key="gen_proc")
+            gen_registro = st.selectbox("Proceso de Registro e Ingreso de Funcionarios, Visitantes y Proveedores", [1, 2, 3, 4, 5], index=2, key="gen_reg")
             gen_seguridad = st.selectbox("Seguridad en general", [1, 2, 3, 4, 5], index=2, key="gen_seg")
             gen_areas = st.selectbox("Áreas comunes de esparcimiento (internas y externas)", [1, 2, 3, 4, 5], index=2, key="gen_areas")
         with col16_b:
             gen_alquiler = st.selectbox("Alquiler de espacios y equipos para actividades de cada usuario/cliente", [1, 2, 3, 4, 5], index=2, key="gen_alq")
             gen_bienestar = st.selectbox("Actividades promovidas por Zonamerica para el bienestar de la comunidad", [1, 2, 3, 4, 5], index=2, key="gen_bien")
             gen_mantenimiento = st.selectbox("Mantenimiento y limpieza de la infraestructura de Zonamerica", [1, 2, 3, 4, 5], index=2, key="gen_mant")
-        
+
         # Pregunta 17: Nivel de satisfacción - Necesidades del personal
         st.markdown("<h4 style='font-size: 20px;'>17. Necesidades del Personal</h4>", unsafe_allow_html=True)
         st.caption("Teniendo en cuenta las necesidades de su personal, por favor califique su Nivel de Satisfacción: (*)")
@@ -335,49 +333,46 @@ def show_survey_bc():
         with col17_b:
             pers_vending = st.selectbox("Vending Machine", [1, 2, 3, 4, 5], index=2, key="pers_vend")
             pers_esparcimiento = st.selectbox("Áreas de esparcimiento en general", [1, 2, 3, 4, 5], index=2, key="pers_espa")
-        
+
         st.markdown("---")
-        
+
         # Pregunta 18: Satisfacción general
         st.markdown("<h4 style='font-size: 20px;'>18. ¿En general, qué tan satisfecho está con Zonamerica? (*)</h4>", unsafe_allow_html=True)
         satisfaccion_general = st.selectbox("Satisfacción general", [1, 2, 3, 4, 5], index=2, key="sat_gen", label_visibility="collapsed")
-        
-        # Pregunta 19: Sugerencias de Servicios para 2025
-        st.markdown("<h4 style='font-size: 20px;'>19. Sugerencias de Servicios para 2025 (*)</h4>", unsafe_allow_html=True)
-        st.caption("¿Cuáles nuevos servicios o mejoramientos propondría usted para el 2025?")
-        servicios_2025 = st.text_area("Sugerencias 2025", key="sug_2025", label_visibility="collapsed")
-        
-        # Pregunta 20: Observaciones - Servicios Generales
+
+        # Pregunta 19: Servicios nuevos 2025
+        st.markdown("<h4 style='font-size: 20px;'>19. ¿Qué tipo de servicios nuevos o mejorados le gustaría ver de nuestra empresa en 2025? (*)</h4>", unsafe_allow_html=True)
+        servicios_2025 = st.text_area("Servicios 2025", key="serv_2025", label_visibility="collapsed")
+
+        # Pregunta 20: Observaciones servicios generales
         st.markdown("<h4 style='font-size: 20px;'>20. Observaciones - Servicios Generales (*)</h4>", unsafe_allow_html=True)
-        st.caption("Con respecto a los Servicios Generales, por favor amplíe sus observaciones y/o sugerencias.")
-        obs_servicios_gen = st.text_area("Observaciones servicios generales", key="obs_serv_gen", label_visibility="collapsed")
-        
-        # Pregunta 21: Observaciones - Business Center
+        st.caption("Con respecto a los Servicios Generales, por favor amplíe sus observaciones y/o sugerencias y/o empresas de apoyo.")
+        obs_servicios_generales = st.text_area("Observaciones generales", key="obs_gen", label_visibility="collapsed")
+
+        # Pregunta 21: Observaciones Business Center
         st.markdown("<h4 style='font-size: 20px;'>21. Observaciones - Business Center (*)</h4>", unsafe_allow_html=True)
-        st.caption("Con respecto al Business Center, por favor amplíe sus observaciones y/o sugerencias.")
-        obs_business_center = st.text_area("Observaciones Business Center", key="obs_bc", label_visibility="collapsed")
-        
-        # Pregunta 22: Observaciones - Amenities
+        st.caption("Con respecto a los Servicios Business Center por favor amplíe sus observaciones y/o sugerencias.")
+        obs_bc = st.text_area("Observaciones BC", key="obs_bc", label_visibility="collapsed")
+
+        # Pregunta 22: Observaciones Amenities
         st.markdown("<h4 style='font-size: 20px;'>22. Observaciones - Amenities (*)</h4>", unsafe_allow_html=True)
         st.caption("Con respecto a los Amenities y/o empresas de apoyo, por favor amplíe sus observaciones y/o sugerencias.")
         obs_amenities = st.text_area("Observaciones amenities", key="obs_amen", label_visibility="collapsed")
-        
+
         # Pregunta 23: Experiencia emocional
         st.markdown("<h4 style='font-size: 20px;'>23. ¿Cómo se siente acerca de su experiencia general con Zonamerica? (*)</h4>", unsafe_allow_html=True)
         emocion = st.radio(
             "Emoción",
             ["Feliz 😄", "Encantado 🤩", "Neutral 😐", "Decepcionado 😞", "Molesto 😠"],
-            horizontal=True,
-            key="emocion",
-            label_visibility="collapsed"
+            horizontal=True, key="emocion", label_visibility="collapsed"
         )
-        
+
         # Pregunta 24: NPS
         st.markdown("<h4 style='font-size: 20px;'>24. De 1 a 10, ¿Qué tanto recomendaría a sus colegas o amigos Zonamerica? (*)</h4>", unsafe_allow_html=True)
         nps = st.selectbox("NPS", options=range(1, 11), index=8, key="nps", label_visibility="collapsed")
 
         submitted = st.form_submit_button("Enviar Encuesta BC", type="primary", use_container_width=True)
-        
+
         if submitted:
             if aceptacion == "No":
                 st.error("⚠️ Debe aceptar la política de tratamiento de datos para continuar.")
@@ -421,9 +416,9 @@ def show_survey_bc():
                     "p15_telefonia": bc_telefonia,
                     "p15_internet_datos": bc_internet,
                     "p15_impresiones": bc_impresiones,
-                    "p15_atencion_cliente": bc_cliente,
-                    "p15_sala_reuniones": bc_reuniones,
-                    "p16_registro_ingreso": gen_proceso,
+                    "p15_atencion_cliente": bc_atencion,
+                    "p15_sala_reuniones": bc_salas,
+                    "p16_registro_ingreso": gen_registro,
                     "p16_seguridad": gen_seguridad,
                     "p16_areas_esparcimiento": gen_areas,
                     "p16_alquiler_espacios": gen_alquiler,
@@ -436,13 +431,16 @@ def show_survey_bc():
                     "p17_esparcimiento": pers_esparcimiento,
                     "p18_satisfaccion_general": satisfaccion_general,
                     "p19_servicios_2025": servicios_2025,
-                    "p20_obs_servicios_generales": obs_servicios_gen,
-                    "p21_obs_business_center": obs_business_center,
+                    "p20_obs_servicios_generales": obs_servicios_generales,
+                    "p21_obs_business_center": obs_bc,
                     "p22_obs_amenities": obs_amenities,
                     "p23_emocion_experiencia": emocion,
-                    "p24_nps_score": nps,
+                    "p24_nps_score": nps
                 }
-                guardar_en_supabase(data_payload, "Cuestionario_BC")
+
+                if guardar_en_supabase(data_payload, "Cuestionario_BC"):
+                    st.balloons()
+                    time.sleep(2)
 
 if __name__ == '__main__':
     show_survey_bc()
