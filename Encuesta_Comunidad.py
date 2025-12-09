@@ -82,7 +82,6 @@ def guardar_en_supabase(datos, tabla):
                 st.success("✅ ¡Datos guardados exitosamente!")
                 st.balloons()
                 time.sleep(2)
-                st.rerun()
                 return True
             else:
                 st.warning("⚠️ No se pudo confirmar el guardado de los datos")
