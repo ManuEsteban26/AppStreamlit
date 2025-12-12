@@ -171,7 +171,16 @@ def show_survey_obra_gris():
 
         # Pregunta 2: Razón social
         st.markdown("<h4 style='font-size: 20px;'>2. Escriba la razón social de su Organización/Empresa. (*)</h4>", unsafe_allow_html=True)
-        razon_social = st.text_input("Razón Social", label_visibility="collapsed")
+        razon_social = st.selectbox("Razón Social",[
+                                                    "Encora",
+                                                    "Cotel Wave",
+                                                    "Johanna Ortiz",
+                                                    "Omnicon",
+                                                    "Lesaffre",
+                                                    "SLC Enterprise",
+                                                    "Tiempo de Cine",
+                                                    "NIDO"
+                                                ],index=1)
         
         # Pregunta 3: Nombre
         st.markdown("<h4 style='font-size: 20px;'>3. Escriba su nombre y apellidos. (*)</h4>", unsafe_allow_html=True)
